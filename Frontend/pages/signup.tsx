@@ -1,22 +1,28 @@
 import React, { useState } from "react";
+import {useRouter} from "next/router";
+import axios from "axios";
+import { useAlert } from "react-alert";
 
 const Signup = () => {
+  const alert = useAlert();
+  const router = useRouter()
   const [name, setName] = useState<string>("");
   const [nameError, setNameError] = useState<boolean>(false);
-  const [shopName, setShopName] = useState<string>("");
+  const [storeName, setStoreName] = useState<string>("");
   const [referralCode, setReferralCode] = useState<string>("");
   const [phone, setPhone] = useState<any>();
   const [phoneError, setPhoneError] = useState<boolean>(false);
-
+  const [pincode, setPincode] = useState<any>("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState<any>();
+  const [otp, setOtp] = useState<any>();
   const phoneBlurHandler = () => {
-    console.log("here");
     let regex = /^[5-9]{2}[0-9]{8}$/;
     if (regex.test(phone)) {
       setPhoneError(false);
-      console.log("true");
     } else {
       setPhoneError(true);
-      console.log("false");
     }
   };
 
@@ -25,6 +31,71 @@ const Signup = () => {
       setNameError(true);
     } else {
       setNameError(false);
+    }
+  };
+
+  const getOtpHandler = async (e: any) => {
+    e.preventDefault();
+    console.log(process.env.NEXT_PUBLIC_API_URL);
+
+    let formData = {
+      name,
+      phone,
+      storeName,
+      pincode,
+      referralCode,
+    };
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      setLoading(true);
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/user/signup`,
+        formData,
+        config
+      );
+      console.log(data);
+      alert.success(data.message);
+      setOtpSent(true);
+      setUserId(data.userId);
+      setLoading(false);
+    } catch (err: any) {
+      console.log(err);
+      alert.error(err.message);
+      setOtpSent(false);
+      setLoading(false);
+    }
+  };
+
+  const signupHandler = async(e:any) => {
+    e.preventDefault();
+    const formData = {
+      otp,
+      userId,
+    }
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      setLoading(true);
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/user/verifyOtp`,
+        formData,
+        config
+      );
+      console.log(data);
+      alert.success("User Created Successfully");
+      router.push('/');
+      setLoading(false)
+    } catch (err:any) {
+      console.log(err);
+      alert.error(err.message);
+      setLoading(false);
     }
   };
 
@@ -68,8 +139,8 @@ const Signup = () => {
                     type="text"
                     required
                     id="reg-ln"
-                    value={shopName}
-                    onChange={(e) => setShopName(e.target.value)}
+                    value={storeName}
+                    onChange={(e) => setStoreName(e.target.value)}
                   />
                   <div className="invalid-feedback">
                     Please enter your Shop name!
@@ -78,7 +149,7 @@ const Signup = () => {
 
                 <div className="col-sm-6">
                   <label className="form-label" htmlFor="referralCode">
-                    referral Code
+                    Referral Code
                   </label>
                   <input
                     className="form-control"
@@ -89,6 +160,20 @@ const Signup = () => {
                     onChange={(e) => setReferralCode(e.target.value)}
                   />
                   <div className="invalid-feedback">Please enter password!</div>
+                </div>
+                <div className="col-sm-6">
+                  <label className="form-label" htmlFor="pincode">
+                    Pincode
+                  </label>
+                  <input
+                    className="form-control"
+                    type="number"
+                    required
+                    id="pincode"
+                    value={pincode}
+                    onChange={(e) => setPincode(e.target.value)}
+                  />
+                  <div className="invalid-feedback">Please enter Pincode</div>
                 </div>
                 <div className="col-sm-6">
                   <label className="form-label" htmlFor="reg-phone">
@@ -110,25 +195,76 @@ const Signup = () => {
                   </div>
                 </div>
 
-                <div className="col-sm-6">
-                  <label className="form-label" htmlFor="reg-password-confirm">
-                    Confirm Password
+                <div
+                  className="col-sm-6"
+                  style={{ display: otpSent ? "block" : "none" }}
+                >
+                  <label className="form-label" htmlFor="otp">
+                    OTP
                   </label>
                   <input
                     className="form-control"
-                    type="password"
+                    type="number"
                     required
-                    id="reg-password-confirm"
+                    id="otp"
+                    value={otp}
+                    onChange={e=>setOtp(e.target.value)}
                   />
-                  <div className="invalid-feedback">
-                    Passwords do not match!
-                  </div>
+                  <div className="invalid-feedback">Otp do not match!</div>
                 </div>
-                <div className="col-12 text-end">
-                  <button className="btn btn-primary" type="submit">
-                    <i className="ci-user me-2 ms-n1"></i>Sign Up
+                <div
+                  className="col-12 text-end"
+                  style={{ display: !otpSent ? "block" : "none" }}
+                >
+                  <button
+                    className="btn btn-primary"
+                    type="submit"
+                    onClick={getOtpHandler}
+                  >
+                    {loading ? (
+                      <React.Fragment>
+                        <span
+                          className="spinner-border spinner-border-sm"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        <span className="visually-hidden">Loading...</span>
+                      </React.Fragment>
+                    ) : (
+                      <React.Fragment>
+                        <i className="ci-user me-2 ms-n1"></i>
+                        Get Otp
+                      </React.Fragment>
+                    )}
                   </button>
                 </div>
+                <div
+                  className="col-12 text-end"
+                  style={{ display: otpSent ? "block" : "none" }}
+                >
+                  <button
+                    className="btn btn-primary"
+                    type="submit"
+                    onClick={signupHandler}
+                  >
+                    {loading ? (
+                      <React.Fragment>
+                        <span
+                          className="spinner-border spinner-border-sm"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        <span className="visually-hidden">Loading...</span>
+                      </React.Fragment>
+                    ) : (
+                      <React.Fragment>
+                        <i className="ci-user me-2 ms-n1"></i>
+                        Signup
+                      </React.Fragment>
+                    )}
+                  </button>
+                </div>
+             
               </div>
             </form>
           </div>

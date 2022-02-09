@@ -25,3 +25,7 @@ a {
 .signupContainer{
   width: 50%;
 }
+
+.otpShow{
+  display: none;
+}
