@@ -3,8 +3,11 @@ import Head from "next/head";
 import Image from "next/image";
 import React from "react";
 import styles from "../styles/Home.module.css";
-
+import { useAppSelector } from "../src/hooks/redux-hooks";
 const Home: NextPage = () => {
+  const {userDetails} =useAppSelector(state=>state.userReducer);
+  console.log(userDetails);
+   
   return (
     <React.Fragment>
       <div className={styles.container}>

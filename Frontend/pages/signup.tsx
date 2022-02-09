@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import {useRouter} from "next/router";
 import axios from "axios";
 import { useAlert } from "react-alert";
-
+import { useAppDispatch,useAppSelector } from "../src/hooks/redux-hooks";
+import { setToken,setIsLoggedIn,setUserDetails } from "../src/store/Reducers/user";
 const Signup = () => {
+  const router = useRouter();
   const alert = useAlert();
-  const router = useRouter()
+  const dispatch = useAppDispatch();
   const [name, setName] = useState<string>("");
   const [nameError, setNameError] = useState<boolean>(false);
   const [storeName, setStoreName] = useState<string>("");
@@ -58,6 +60,9 @@ const Signup = () => {
         config
       );
       console.log(data);
+      dispatch(setToken(data.token))
+      dispatch(setUserDetails(data.userDetails))
+      dispatch(setIsLoggedIn(true));
       alert.success(data.message);
       setOtpSent(true);
       setUserId(data.userId);
