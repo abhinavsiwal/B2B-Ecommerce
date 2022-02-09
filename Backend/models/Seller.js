@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const sellerSchema = new Schema({
+const sellerSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -17,6 +17,9 @@ const sellerSchema = new Schema({
   pincode: {
     type: Number,
     required: true,
+  },
+  referralCode: {
+    type: String,
   },
   phoneOtp: String,
   products: [

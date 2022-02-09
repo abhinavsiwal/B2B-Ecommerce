@@ -13,9 +13,11 @@ app.use(
 // app.use(bodyParser.json());
 // Import all the Routes
 const products = require('./routes/product');
-const user = require('./routes/user')
+const user = require('./routes/user');
+const seller = require('./routes/seller');
 
 app.use('/products',products);
 app.use('/user',user);
+app.use('/seller',seller);
 
 module.exports = app;
