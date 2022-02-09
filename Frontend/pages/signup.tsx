@@ -60,9 +60,7 @@ const Signup = () => {
         config
       );
       console.log(data);
-      dispatch(setToken(data.token))
-      dispatch(setUserDetails(data.userDetails))
-      dispatch(setIsLoggedIn(true));
+     
       alert.success(data.message);
       setOtpSent(true);
       setUserId(data.userId);
@@ -94,6 +92,9 @@ const Signup = () => {
         config
       );
       console.log(data);
+      dispatch(setToken(data.token))
+      dispatch(setUserDetails(data.userDetails))
+      dispatch(setIsLoggedIn(true));
       alert.success("User Created Successfully");
       router.push('/');
       setLoading(false)

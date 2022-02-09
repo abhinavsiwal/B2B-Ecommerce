@@ -24,6 +24,70 @@ const Login = () => {
     }
   };
 
+  const getOtpHandler = async (e: any) => {
+    e.preventDefault();
+    console.log(process.env.NEXT_PUBLIC_API_URL);
+
+    let formData = {
+      phone,
+    };
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      setLoading(true);
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/user/login`,
+        formData,
+        config
+      );
+      console.log(data);
+      alert.success(data.message);
+      setOtpSent(true);
+      setUserId(data.userId);
+      setLoading(false);
+    } catch (err: any) {
+      console.log(err);
+      alert.error(err.message);
+      setOtpSent(false);
+      setLoading(false);
+    }
+  };
+
+  const signupHandler = async(e:any) => {
+    e.preventDefault();
+    const formData = {
+      otp,
+      userId,
+    }
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      setLoading(true);
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/user/verifyOtp`,
+        formData,
+        config
+      );
+      console.log(data);
+      alert.success("User Created Successfully");
+      dispatch(setToken(data.token))
+      dispatch(setUserDetails(data.userDetails))
+      dispatch(setIsLoggedIn(true));
+      router.push('/');
+      setLoading(false);
+    } catch (err:any) {
+      console.log(err);
+      alert.error(err.message);
+      setLoading(false);
+    }
+  };
+
   return (
     <React.Fragment>
       <div className="authContainer"> 
@@ -49,14 +113,16 @@ const Login = () => {
                     Please enter valid phone number!
                   </div>
               </div>
-              <div className="input-group mb-4">
+              <div className="input-group mb-4"   style={{ display: otpSent ? "block" : "none" }} >
                 <i className="ci-locked position-absolute top-50 translate-middle-y text-muted fs-base ms-3"></i>
-                <div className="password-toggle w-100">
+                <div className="password-toggle w-100" >
                   <input
                     className="form-control"
-                    type="password"
-                    placeholder="Password"
+                    type="number"
+                    placeholder="OTP"
                     required
+                    value={otp}
+                    onChange={e=>setOtp(e.target.value)}
                   />
                   <label
                     className="password-toggle-btn"
@@ -69,10 +135,51 @@ const Login = () => {
               </div>
              
               <hr className="mt-4" />
-              <div className="text-end pt-4">
-                <button className="btn btn-primary" type="submit">
-                  <i className="ci-sign-in me-2 ms-n21"></i>Sign In
-                </button>
+              <div className="text-end pt-4"  >
+              <button
+                    className="btn btn-primary"
+                    type="submit"style={{ display: !otpSent ? "block" : "none" }}
+                    onClick={getOtpHandler}
+                  >
+                    {loading ? (
+                      <React.Fragment>
+                        <span
+                          className="spinner-border spinner-border-sm"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        <span className="visually-hidden">Loading...</span>
+                      </React.Fragment>
+                    ) : (
+                      <React.Fragment>
+                        <i className="ci-user me-2 ms-n1"></i>
+                        Get Otp
+                      </React.Fragment>
+                    )}
+                  </button>
+              </div>
+              <div className="text-end pt-4" style={{ display: otpSent ? "block" : "none" }}>
+              <button
+                    className="btn btn-primary"
+                    type="submit"
+                    onClick={signupHandler}
+                  >
+                    {loading ? (
+                      <React.Fragment>
+                        <span
+                          className="spinner-border spinner-border-sm"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        <span className="visually-hidden">Loading...</span>
+                      </React.Fragment>
+                    ) : (
+                      <React.Fragment>
+                        <i className="ci-user me-2 ms-n1"></i>
+                        Login
+                      </React.Fragment>
+                    )}
+                  </button>
               </div>
             </form>
           </div>

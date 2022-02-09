@@ -107,7 +107,7 @@ exports.login = async (req, res, next) => {
       .status(500)
       .json({ message: "Login falied, Please try again later" });
   }
-  res.status(201).json({ success: true, message: "OTP sent successfully." });
+  res.status(201).json({ success: true, message: "OTP sent successfully." ,userId:existingUser._id});
 };
 
 // @route POST /signup
