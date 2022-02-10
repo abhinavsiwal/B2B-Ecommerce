@@ -29,6 +29,10 @@ const sellerSchema = new mongoose.Schema({
       ref: "Product",
     },
   ],
+  role:{
+    type:String,
+    default:'user',
+},
 });
 
 module.exports = mongoose.model("Seller", sellerSchema);
