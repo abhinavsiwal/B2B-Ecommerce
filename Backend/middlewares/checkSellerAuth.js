@@ -6,26 +6,26 @@ exports.isAuthenticatedSeller = async(req,res,next)=>{
     try{
         const header = req.headers.authorization;
         if(!header){
-            next({status:403,message:"Authorization token missing"})
-            return;
+            return res.status(403).json({message:"Authorization token missing"})
+        
         }
         const token = header.split("Bearer ")[1];
 
         if(!token){
-            next({ status: 403, message:"Token not found" })
-            return
+            return res.status(403).json({message:"Token not found"})
+        
         }
         const sellerId = verifyJwtToken(token,next);
+       
         if(!sellerId){
-            next({status:403,message:"JWT token not decoded"})
-            return;
+            console.log("Jwt token not decoded");
+            return res.status(403).json({message:"Jwt token not decoded."})
         }
         const seller = await Seller.findById(sellerId);
         if(!seller){
-            next({status:404,message:"User not found."})
-            return;
+            return res.status(404).json({message:"Seller not found"})
         }
-        res.locals.seller = seller;
+        req.seller = seller;
         next()
     }catch(err){
         next(err);
