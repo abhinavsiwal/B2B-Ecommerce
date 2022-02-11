@@ -3,20 +3,23 @@ import Link from "next/link";
 const Sidebar = () => {
   return (
     <React.Fragment>
-      <aside className="navbar-aside" id="offcanvas_aside">
+      <aside className="navbar-aside offcanvas offcanvas-start" id="offcanvas_aside"  aria-labelledby="offcanvasExampleLabel" >
         <div className="aside-top">
-            <Link href="/">
-          <a href="#" className="brand-wrap">
-            <img
-              src="/images/logo.svg"
-              height="46"
-              className="logo"
-              alt="Ecommerce dashboard template"
+          <Link href="/">
+            <a href="#" className="brand-wrap">
+              <img
+                src="/images/logo.svg"
+                height="46"
+                className="logo"
+                alt="Ecommerce dashboard template"
               />
-          </a>
-              </Link>
+            </a>
+          </Link>
           <div>
-            <button className="btn btn-icon btn-aside-minimize" onClick={()=>console.log("Clicked")}>
+            <button
+              className="btn btn-icon btn-aside-minimize"
+              onClick={() => console.log("Clicked")}
+            >
               {" "}
               <i className="text-muted material-icons md-menu_open"></i>
             </button>
@@ -73,18 +76,14 @@ const Sidebar = () => {
                 <a href="page-seller-detail.html">Seller profile</a>
               </div>
             </li>
-            <li className="menu-item has-submenu">
+            <li className="menu-item">
+              <Link href="/addProduct">
               <a className="menu-link" href="page-form-product-1.html">
                 {" "}
                 <i className="icon material-icons md-add_box"></i>
                 <span className="text">Add product</span>
               </a>
-              <div className="submenu">
-                <a href="page-form-product-1.html">Add product 1</a>
-                <a href="page-form-product-2.html">Add product 2</a>
-                <a href="page-form-product-3.html">Add product 3</a>
-                <a href="page-form-product-4.html">Add product 4</a>
-              </div>
+              </Link>
             </li>
             <li className="menu-item has-submenu">
               <a className="menu-link" href="page-transactions-A.html">
@@ -157,6 +156,7 @@ const Sidebar = () => {
         </nav>
       </aside>
       {/* ----Header---- */}
+      <main className="main-wrap">
       <header className="main-header navbar">
         <div className="col-search">
           <form className="searchform">
@@ -184,6 +184,10 @@ const Sidebar = () => {
           <button
             className="btn btn-icon btn-mobile me-auto"
             data-trigger="#offcanvas_aside"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvas-aside"
+            aria-controls="offcanvas-aside"
           >
             {" "}
             <i className="md-28 material-icons md-menu"></i>{" "}
@@ -231,6 +235,7 @@ const Sidebar = () => {
           </ul>
         </div>
       </header>
+      </main>
     </React.Fragment>
   );
 };

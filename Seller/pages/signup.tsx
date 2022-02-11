@@ -21,7 +21,7 @@ const Signup = () => {
   const [pincode, setPincode] = useState<any>("");
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [userId, setUserId] = useState<any>();
+  const [sellerId, setSellerId] = useState<any>();
   const [otp, setOtp] = useState<any>();
   const phoneBlurHandler = () => {
     let regex = /^[5-9]{2}[0-9]{8}$/;
@@ -67,7 +67,7 @@ const Signup = () => {
 
       alert.success(data.message);
       setOtpSent(true);
-      setUserId(data.userId);
+      setSellerId(data.userId);
       setLoading(false);
     } catch (err: any) {
       console.log(err);
@@ -81,7 +81,7 @@ const Signup = () => {
     e.preventDefault();
     const formData = {
       otp,
-      userId,
+      sellerId,
     };
     const config = {
       headers: {
@@ -110,154 +110,162 @@ const Signup = () => {
   };
 
   return (
-    <section className="content-main">
-      {/* <!-- ============================ COMPONENT LOGIN   ================================= --> */}
-      <div
-        className="card shadow mx-auto"
-        style={{ maxWidth: "480px", marginTop: "30px" }}
-      >
-        <div className="card-body">
-          <h4 className="card-title mb-4">Register</h4>
-          <form>
-            <div className="mb-3">
-              <label className="form-label">Name</label>
-              <input
-                 className={
-                  !nameError ? "form-control" : "form-control is-invalid"
-                }
-                placeholder="Enter your name"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                onBlur={nameBlurHandler}
-              />
-              <div className="invalid-feedback">Please enter your name!</div>
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Phone no</label>
-              <input
-                className={
-                  !phoneError ? "form-control" : "form-control is-invalid"
-                }
-                placeholder="+91"
-                type="number"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                onBlur={phoneBlurHandler}
-              />
-              <div className="invalid-feedback">
-                Please enter valid phone number!
+    <main className="main-wrap">
+      <section className="content-main">
+        {/* <!-- ============================ COMPONENT LOGIN   ================================= --> */}
+        <div
+          className="card shadow mx-auto"
+          style={{ maxWidth: "480px", marginTop: "30px" }}
+        >
+          <div className="card-body">
+            <h4 className="card-title mb-4">Register</h4>
+            <form>
+              <div className="mb-3">
+                <label className="form-label">Name</label>
+                <input
+                  className={
+                    !nameError ? "form-control" : "form-control is-invalid"
+                  }
+                  placeholder="Enter your name"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  onBlur={nameBlurHandler}
+                />
+                <div className="invalid-feedback">Please enter your name!</div>
               </div>
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Store Name</label>
-              <input
-                className="form-control"
-                placeholder="Enter your store name"
-                type="text"
-                value={storeName}
-                onChange={(e) => setStoreName(e.target.value)}
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Referral Code</label>
-              <input
-                className="form-control"
-                placeholder="Enter your referral code"
-                type="text"
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Pincode</label>
-              <input
-                className="form-control"
-                placeholder="Enter your pincode"
-                type="text"
-                value={pincode}
-                onChange={(e) => setPincode(e.target.value)}
-              />
-            </div>
-            {/* <!-- form-group// --> */}
-            <div
-              className="mb-3"
-              style={{ display: otpSent ? "block" : "none" }}
-            >
-              <label className="form-label">OTP</label>
-              <div className="row gx-2">
-                <div className="col-4">
-                  {" "}
-                  <input
-                    className="form-control"
-                    type="number"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                  />{" "}
+              <div className="mb-3">
+                <label className="form-label">Phone no</label>
+                <input
+                  className={
+                    !phoneError ? "form-control" : "form-control is-invalid"
+                  }
+                  placeholder="+91"
+                  type="number"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  onBlur={phoneBlurHandler}
+                />
+                <div className="invalid-feedback">
+                  Please enter valid phone number!
                 </div>
               </div>
-            </div>
-            {/* <!-- form-group// --> */}
-            <div className="mb-3">
-              <p className="small text-center text-muted">
-                By signing up, you confirm that you’ve read and accepted our
-                User Notice and Privacy Policy.
-              </p>
-            </div>
-            {/* <!-- form-group  .// --> */}
-            <div
-              className="mb-4"
-              style={{ display: !otpSent ? "block" : "none" }}
-            >
-              <button type="submit" className="btn btn-primary w-100">
-                {loading ? (
-                  <React.Fragment>
-                    <span
-                      className="spinner-border spinner-border-sm"
-                      role="status"
-                      aria-hidden="true"
-                    ></span>
-                    <span className="visually-hidden">Loading...</span>
-                  </React.Fragment>
-                ) : (
-                  <React.Fragment>Get Otp</React.Fragment>
-                )}
-              </button>
-            </div>
-            <div
-              className="mb-4"
-              style={{ display: otpSent ? "block" : "none" }}
-            >
-              <button type="submit" className="btn btn-primary w-100">
-                {loading ? (
-                  <React.Fragment>
-                    <span
-                      className="spinner-border spinner-border-sm"
-                      role="status"
-                      aria-hidden="true"
-                    ></span>
-                    <span className="visually-hidden">Loading...</span>
-                  </React.Fragment>
-                ) : (
-                  <React.Fragment>Signup</React.Fragment>
-                )}
-              </button>
-            </div>
-            {/* <!-- form-group// --> */}
-          </form>
-          {/* For future ==> Social media login */}
-          {/* <!-- social buttons   --> */}
+              <div className="mb-3">
+                <label className="form-label">Store Name</label>
+                <input
+                  className="form-control"
+                  placeholder="Enter your store name"
+                  type="text"
+                  value={storeName}
+                  onChange={(e) => setStoreName(e.target.value)}
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Referral Code</label>
+                <input
+                  className="form-control"
+                  placeholder="Enter your referral code"
+                  type="text"
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Pincode</label>
+                <input
+                  className="form-control"
+                  placeholder="Enter your pincode"
+                  type="text"
+                  value={pincode}
+                  onChange={(e) => setPincode(e.target.value)}
+                />
+              </div>
+              {/* <!-- form-group// --> */}
+              <div
+                className="mb-3"
+                style={{ display: otpSent ? "block" : "none" }}
+              >
+                <label className="form-label">OTP</label>
+                <div className="row gx-2">
+                  <div className="col-4">
+                    {" "}
+                    <input
+                      className="form-control"
+                      type="number"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                    />{" "}
+                  </div>
+                </div>
+              </div>
+              {/* <!-- form-group// --> */}
+              <div className="mb-3">
+                <p className="small text-center text-muted">
+                  By signing up, you confirm that you’ve read and accepted our
+                  User Notice and Privacy Policy.
+                </p>
+              </div>
+              {/* <!-- form-group  .// --> */}
+              <div
+                className="mb-4"
+                style={{ display: !otpSent ? "block" : "none" }}
+              >
+                <button
+                  onClick={getOtpHandler}
+                  className="btn btn-primary w-100"
+                >
+                  {loading ? (
+                    <React.Fragment>
+                      <span
+                        className="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      <span className="visually-hidden">Loading...</span>
+                    </React.Fragment>
+                  ) : (
+                    <React.Fragment>Get Otp</React.Fragment>
+                  )}
+                </button>
+              </div>
+              <div
+                className="mb-4"
+                style={{ display: otpSent ? "block" : "none" }}
+              >
+                <button
+                  onClick={signupHandler}
+                  className="btn btn-primary w-100"
+                >
+                  {loading ? (
+                    <React.Fragment>
+                      <span
+                        className="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      <span className="visually-hidden">Loading...</span>
+                    </React.Fragment>
+                  ) : (
+                    <React.Fragment>Signup</React.Fragment>
+                  )}
+                </button>
+              </div>
+              {/* <!-- form-group// --> */}
+            </form>
+            {/* For future ==> Social media login */}
+            {/* <!-- social buttons   --> */}
 
-          {/* <!-- social buttons //end  --> */}
+            {/* <!-- social buttons //end  --> */}
 
-          <p className="text-center mb-2">
-            Don't have account? <a href="#">Sign up</a>
-          </p>
+            <p className="text-center mb-2">
+              Don't have account? <a href="#">Sign up</a>
+            </p>
+          </div>
+          {/* <!-- card-body.// --> */}
         </div>
-        {/* <!-- card-body.// --> */}
-      </div>
-      {/* <!-- card .// --> */}
+        {/* <!-- card .// --> */}
 
-      {/* <!-- ============================ COMPONENT LOGIN  END.// ================================= --> */}
-    </section>
+        {/* <!-- ============================ COMPONENT LOGIN  END.// ================================= --> */}
+      </section>
+    </main>
   );
 };
 
