@@ -7,24 +7,30 @@ const APIFeatures = require("../utils/apiFeatures");
 // @access Seller
 
 exports.newProduct = async (req,res,next)=>{
-    // let images = [];
-    // if(typeOf(req.body.images==="string")){
-    //     images.push(req.body.images)
-    // }else{
-    //     images = req.body.images;
-    // }
-    // let imageLinks = [];
-    // for(let i=0;i<images.length;i++){
-    //     const result = await cloudinary.v2.uploader.upload(images[i],{
-    //         folder:"products"
-    //     })
-    //     imagesLinks.push({
-    //         public_id:result.public_id,
-    //         url:result.secure_url
-    //     })
-    // }
-    // req.body.images=imagesLinks;
-    console.log(req.seller);
+    let images = [];
+
+    if(typeof(req.body.images)==="string"){
+        images.push(req.body.images)
+    }else{
+        images = req.body.images;
+    }
+    let imagesLinks = [];
+    for(let i=0;i<images.length;i++){
+      try {
+        const result = await cloudinary.v2.uploader.upload(images[i],{
+          folder:"products",
+          fetch_format:"auto",
+      })
+      imagesLinks.push({
+          public_id:result.public_id,
+          url:result.secure_url
+      })     
+      } catch (err) {
+        console.log(err);
+      }
+   
+    }
+    req.body.images=imagesLinks;
     req.body.seller=req.seller._id;
     let product;
     try {
@@ -37,6 +43,7 @@ exports.newProduct = async (req,res,next)=>{
 kl    }
     res.status(201).json({
         success:true,
+        message:"Product Successfully added",
         product,
     })
 }
@@ -93,7 +100,7 @@ exports.getProductById = async (req,res,next)=>{
           .status(500)
           .json({ message: "Could not find product for this id" });
       }
-      res.status(200).json({success:true,product});
+      res.status(200).json({success:true,message:"Added Product Successfully",product});
 }
 
 

@@ -5,7 +5,6 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    maxLength: 100,
   },
   price: {
     type: Number,
@@ -34,22 +33,23 @@ const productSchema = new mongoose.Schema({
     required: true,
     enum: {
       values: [
-        "Electronics",
-        "Cameras",
-        "Laptops",
-        "Mobiles",
-        "Accessories",
-        "Headphones",
-        "Food",
-        "Books",
-        "Clothes",
-        "Shoes",
-        "Beauty",
-        "Health",
-        "Sports",
-        "Outdoor",
-        "Home",
+        "Shirt",
+        "T Shirt",
+        "Joggers",
+        "Vests",
+        "Knitwear",
+        "Shorts",
+        "Winterwear",
+        "Sportswear",
       ],
+      message: "Please select correct category for product",
+    },
+  },
+  idealFor: {
+    type: String,
+    required: true,
+    enum: {
+      values: ["Both", "Men", "Women"],
       message: "Please select correct category for product",
     },
   },
@@ -59,15 +59,41 @@ const productSchema = new mongoose.Schema({
     maxLength: 5,
     default: 0,
   },
-  seller: {
-      type:mongoose.Types.ObjectId,
-      ref:"Seller",
-      required:true,
+  fabric: {
+    type: String,
+    required: true,
+    trim: true,
   },
-  createdAt:{
-      type:Date,
-      default:Date.now,
-  }
+  color: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  size: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  design: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  brand: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+
+  seller: {
+    type: mongoose.Types.ObjectId,
+    ref: "Seller",
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 module.exports = mongoose.model("Product", productSchema);
