@@ -7,29 +7,29 @@ const APIFeatures = require("../utils/apiFeatures");
 // @access Seller
 
 exports.newProduct = async (req, res, next) => {
-  // let images = [];
+  let images = [];
 
-  // if (typeof req.body.images === "string") {
-  //   images.push(req.body.images);
-  // } else {
-  //   images = req.body.images;
-  // }
-  // let imagesLinks = [];
-  // for (let i = 0; i < images.length; i++) {
-  //   try {
-  //     const result = await cloudinary.v2.uploader.upload(images[i], {
-  //       folder: "products",
-  //       fetch_format: "auto",
-  //     });
-  //     imagesLinks.push({
-  //       public_id: result.public_id,
-  //       url: result.secure_url,
-  //     });
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
-  // req.body.images = imagesLinks;
+  if (typeof req.body.images === "string") {
+    images.push(req.body.images);
+  } else {
+    images = req.body.images;
+  }
+  let imagesLinks = [];
+  for (let i = 0; i < images.length; i++) {
+    try {
+      const result = await cloudinary.v2.uploader.upload(images[i], {
+        folder: "products",
+        fetch_format: "auto",
+      });
+      imagesLinks.push({
+        public_id: result.public_id,
+        url: result.secure_url,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  req.body.images = imagesLinks;
   req.body.seller = req.seller._id;
   let product;
   try {

@@ -1,5 +1,6 @@
 import "../styles/globals.css";
 import Script from "next/script";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import "../styles/css/bootstrapf9e3.css";
 import "../styles/css/uif9e3.css";
 import "../styles/css/responsivef9e3.css";

@@ -3,7 +3,7 @@ import Link from "next/link";
 const Sidebar = () => {
   return (
     <React.Fragment>
-      <aside className="navbar-aside offcanvas offcanvas-start" id="offcanvas_aside"  aria-labelledby="offcanvasExampleLabel" >
+      <aside className="navbar-aside" id="offcanvas_aside"  aria-labelledby="offcanvasExampleLabel" >
         <div className="aside-top">
           <Link href="/">
             <a href="#" className="brand-wrap">
@@ -38,19 +38,16 @@ const Sidebar = () => {
                 </a>
               </Link>
             </li>
-            <li className="menu-item has-submenu">
+            <li className="menu-item">
+              <Link href="/products">
+
               <a className="menu-link" href="page-products-list.html">
                 {" "}
                 <i className="icon material-icons md-shopping_bag"></i>
                 <span className="text">Products</span>
               </a>
-              <div className="submenu">
-                <a href="page-products-list.html">Product list view</a>
-                <a href="page-products-table.html">Product table view</a>
-                <a href="page-products-grid.html">Product grid</a>
-                <a href="page-products-grid-2.html">Product grid 2</a>
-                <a href="page-categories.html">Categories</a>
-              </div>
+              </Link>
+        
             </li>
             <li className="menu-item has-submenu">
               <a className="menu-link" href="page-orders-1.html">

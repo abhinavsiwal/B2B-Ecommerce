@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface collectionsState{
+interface productsState{
     products:[{}],
 }
 
-const  initialState:collectionsState={
+const  initialState:productsState={
     products:[{}],
 }
 
@@ -12,11 +12,11 @@ export const productsSlice=createSlice({
     name:"products",
     initialState,
     reducers:{
-        setCollections:(state,action:PayloadAction<[{}]>)=>{
+        setProducts:(state,action:PayloadAction<[{}]>)=>{
             state.products=action.payload;
         },
     }
 })
 
-export const {setCollections} = productsSlice.actions;
+export const {setProducts} = productsSlice.actions;
 export default productsSlice.reducer;
