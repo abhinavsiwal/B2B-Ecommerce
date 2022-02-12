@@ -102,7 +102,7 @@ exports.getProductById = async (req, res, next) => {
   }
   res
     .status(200)
-    .json({ success: true, message: "Added Product Successfully", product });
+    .json({ success: true, message: "Product Getted Successfully", product });
 };
 
 // @route PUT /product/:id
@@ -110,50 +110,80 @@ exports.getProductById = async (req, res, next) => {
 // @access Seller
 
 exports.updateProduct = async (req, res, next) => {
-  let product = await Product.findById(req.params.id);
-
-  if (!product) {
-    res.status(404).json({ message: "Product not found." });
+  const productId = req.params.id;
+  const sellerId = req.seller._id;
+  console.log(productId);
+  let product;
+  try {
+    product = await Product.findById(productId);
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(500)
+      .json({ message: "Something went wrong in getting Product" });
   }
-  // let images = [];
-  // if (typeof req.body.images === "string") {
-  //   images.push(req.body.images);
-  // } else {
-  //   images = req.body.images;
-  // }
+  if (!product) {
+    return res
+      .status(404)
+      .json({ message: "Could not find product for this id" });
+  }
 
-  // if (images !== undefined) {
-  //   // Deleting images associated with the product
-  //   for (let i = 0; i < product.images.length; i++) {
-  //     const result = await cloudinary.v2.uploader.destroy(
-  //       product.images[i].public_id
-  //     );
-  //   }
 
-  //   let imagesLinks = [];
+  const bool = product.seller.toString()!==sellerId.toString();
+  if(bool){
+      console.log(product.seller.toString(),"#####SELLER");
+      console.log(sellerId.toString(),"@@@@@@@@seller");
+      return res.status(401).json({message:"You are not allowed to update this product"})
+    }
+  
 
-  //   for (let i = 0; i < images.length; i++) {
-  //     const result = await cloudinary.v2.uploader.upload(images[i], {
-  //       folder: "products",
-  //     });
+  let images = [];
+  if (typeof req.body.images === "string") {
+    images.push(req.body.images);
+  } else {
+    images = req.body.images;
+  }
 
-  //     imagesLinks.push({
-  //       public_id: result.public_id,
-  //       url: result.secure_url,
-  //     });
-  //   }
+  if (images !== undefined) {
+    // Deleting images associated with the product
+    for (let i = 0; i < product.images.length; i++) {
+      const result = await cloudinary.v2.uploader.destroy(
+        product.images[i].public_id
+      );
+    }
 
-  //   req.body.images = imagesLinks;
-  // }
+    let imagesLinks = [];
 
-  product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-    useFindAndModify: false,
-  });
+    for (let i = 0; i < images.length; i++) {
+      const result = await cloudinary.v2.uploader.upload(images[i], {
+        folder: "products",
+      });
+
+      imagesLinks.push({
+        public_id: result.public_id,
+        url: result.secure_url,
+      });
+    }
+
+    req.body.images = imagesLinks;
+  }
+
+  try {
+
+    product = await Product.findByIdAndUpdate(productId, req.body, {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false,
+    });    
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({message:"Error in Updating product"})
+  }
+
 
   res.status(200).json({
     success: true,
+    message:"Product Updated Successfully",
     product,
   });
 };

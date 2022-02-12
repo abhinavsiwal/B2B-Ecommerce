@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/router";
 import { Dropdown, Spinner } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../src/hooks/redux-hooks";
 import { setProducts } from "../src/store/Reducers/products";
@@ -7,10 +8,11 @@ import { useAlert } from "react-alert";
 
 const Products = () => {
   const alert = useAlert();
+  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const { products } = useAppSelector((state) => state.productsReducer);
-  const {token} = useAppSelector(state=>state.sellerReducer)
+  const { token } = useAppSelector((state) => state.sellerReducer);
   useEffect(() => {
     getProducts();
   }, []);
@@ -27,37 +29,43 @@ const Products = () => {
       dispatch(setProducts(data.products));
       setLoading(false);
     } catch (err) {
-        console.log(err);
-        setLoading(false)
-        
+      console.log(err);
+      setLoading(false);
     }
   };
 
-  const deleteProductHandler=async(productId:any)=>{
-      const config={
-          headers:{
-              Authorization:`Bearer ${token}`
-          }
+  const deleteProductHandler = async (productId: any) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    try {
+      setLoading(true);
+      const { data } = await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/products/product/${productId}`,
+        config
+      );
+      console.log(data);
+      if (data.success) {
+        getProducts();
+        alert.success(data.message);
       }
-        try {
-            setLoading(true);
-            const {data} = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/products/product/${productId}`,config)
-            console.log(data);
-            if(data.success){
-                getProducts();
-                alert.success(data.message);
-            }
-            setLoading(false);
-        } catch (err:any) {
-            console.log(err);
-            if (err.response.data.message) {
-                alert.error(err.response.data.message);
-            }else{
-                alert.error("Something went wrong. Please try again")
-            }           
-            setLoading(false); 
-        }
-  }
+      setLoading(false);
+    } catch (err: any) {
+      console.log(err);
+      if (err.response.data.message) {
+        alert.error(err.response.data.message);
+      } else {
+        alert.error("Something went wrong. Please try again");
+      }
+      setLoading(false);
+    }
+  };
+
+  const updateProductHandler = (productId: any) => {
+    router.push(`/updateProduct/${productId}`);
+  };
 
   return (
     <React.Fragment>
@@ -106,7 +114,12 @@ const Products = () => {
           </header>
           {/* <!-- card-header end// --> */}
           {loading ? (
-            <Spinner animation="border" role="status" variant="info" style={{marginTop:"2rem",margin:"auto"}} >
+            <Spinner
+              animation="border"
+              role="status"
+              variant="info"
+              style={{ marginTop: "2rem", margin: "auto" }}
+            >
               <span className="visually-hidden">Loading...</span>
             </Spinner>
           ) : (
@@ -125,7 +138,9 @@ const Products = () => {
                           <div className="left">
                             <img
                               src={
-                               product.images && product.images[0] ? product.images[0].url : ""
+                                product.images && product.images[0]
+                                  ? product.images[0].url
+                                  : ""
                               }
                               className="img-sm img-thumbnail"
                               alt="Item"
@@ -161,14 +176,22 @@ const Products = () => {
                               <Dropdown.Item href="#" className="dropdown-item">
                                 View Detail
                               </Dropdown.Item>
-                              <Dropdown.Item className="dropdown-item" href="#">
+                              <Dropdown.Item
+                                className="dropdown-item"
+                                href="#"
+                                onClick={() =>
+                                  updateProductHandler(product._id)
+                                }
+                              >
                                 Edit info
                               </Dropdown.Item>
                               <Dropdown.Item
                                 href="#"
                                 className="dropdown-item"
                                 style={{ color: "red" }}
-                                onClick={()=>deleteProductHandler(product._id)}
+                                onClick={() =>
+                                  deleteProductHandler(product._id)
+                                }
                               >
                                 Delete
                               </Dropdown.Item>
