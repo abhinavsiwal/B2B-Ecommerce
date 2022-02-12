@@ -13,6 +13,7 @@ import {
 import storage from "redux-persist/lib/storage";
 import { PersistGate } from "redux-persist/integration/react";
 import userReducer from './Reducers/user'
+import productsReducer from './Reducers/products'
 
 const reducers = combineReducers({
     userReducer
@@ -22,7 +23,7 @@ const persistConfig = {
     key: "root",
     version: 1,
     storage,
-    whitelist: ["userReducer"],
+    whitelist: ["userReducer,productsReducer"],
   };
 
   const persistedReducer = persistReducer(persistConfig, reducers);
