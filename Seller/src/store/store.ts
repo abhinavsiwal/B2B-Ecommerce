@@ -12,10 +12,12 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { PersistGate } from "redux-persist/integration/react";
-import sellerReducer from './Reducers/seller'
+import sellerReducer from './Reducers/seller';
+import productsReducer from './Reducers/products'
 
 const reducers = combineReducers({
-    sellerReducer
+    sellerReducer,
+    productsReducer
 })
 
 const persistConfig = {
