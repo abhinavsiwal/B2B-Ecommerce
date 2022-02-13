@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface SellerState { 
-  token: String;
+  sellerToken: String;
   isLoggedIn:boolean;
   sellerDetails:{},
 }
 
 const initialState: SellerState = {
-  token: "",
+  sellerToken: "",
   isLoggedIn:false,
   sellerDetails:{},
 };
@@ -17,7 +17,7 @@ export const sellerSlice = createSlice({
   initialState,
   reducers: {
     setToken: (state, action: PayloadAction<String>) => {
-      state.token = action.payload;
+      state.sellerToken = action.payload;
     },
     setIsLoggedIn:(state,action:PayloadAction<boolean>)=>{
       state.isLoggedIn=action.payload;

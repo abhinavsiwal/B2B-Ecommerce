@@ -110,7 +110,7 @@ const Signup = () => {
   };
 
   return (
-    <main className="main-wrap">
+
       <section className="content-main">
         {/* <!-- ============================ COMPONENT LOGIN   ================================= --> */}
         <div
@@ -265,7 +265,6 @@ const Signup = () => {
 
         {/* <!-- ============================ COMPONENT LOGIN  END.// ================================= --> */}
       </section>
-    </main>
   );
 };
 

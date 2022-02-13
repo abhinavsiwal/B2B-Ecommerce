@@ -12,27 +12,26 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { PersistGate } from "redux-persist/integration/react";
-import userReducer from './Reducers/user'
-import productsReducer from './Reducers/products'
+import userReducer from "./Reducers/user";
+import productsReducer from "./Reducers/products";
 
 const reducers = combineReducers({
-    userReducer
-})
+  userReducer,
+  productsReducer,
+});
 
 const persistConfig = {
-    key: "root",
-    version: 1,
-    storage,
-    whitelist: ["userReducer,productsReducer"],
-  };
+  key: "root",
+  version: 1,
+  storage,
+  whitelist: ["userReducer,productsReducer"],
+};
 
-  const persistedReducer = persistReducer(persistConfig, reducers);
-
-
+const persistedReducer = persistReducer(persistConfig, reducers);
 
 export const store = configureStore({
-    reducer: persistedReducer,
-    middleware: (getDefaultMiddleware) =>
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Router } from "next/router";
 import { useAppDispatch, useAppSelector } from "../src/hooks/redux-hooks";
 import { useAlert } from "react-alert";
+import {sendRequest} from '../src/hooks/request'
 import axios from "axios";
 const AddProduct = () => {
   const alert = useAlert();
@@ -12,16 +13,16 @@ const AddProduct = () => {
   const [design, setDesign] = useState<string>("");
   const [brand, setBrand] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [price, setPrice] = useState<any>(0);
-  const [stock, setStock] = useState<any>(0);
-  const [category, setCategory] = useState<string>("");
-  const [idealFor, setIdealFor] = useState<string>("");
+  const [price, setPrice] = useState<any>();
+  const [stock, setStock] = useState<any>();
+  const [category, setCategory] = useState<string>("Shirt");
+  const [idealFor, setIdealFor] = useState<string>("Both");
   const [images, setImages] = useState<any>([]);
   const [imagesPreview, setImagesPreview] = useState<any>([]);
 
   const [loading, setLoading] = useState<boolean>(false);
 
-    const {token} = useAppSelector(state=>state.sellerReducer);
+    const {sellerToken} = useAppSelector(state=>state.sellerReducer);
 
   const categories = [
     "Shirt",
@@ -72,25 +73,29 @@ const AddProduct = () => {
       });
 
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    };
+
 
     // console.log(productData);
     try {
       setLoading(true);
-      const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/products/product/new`,
-        formData,
-        config
-      );
+      const { data } = await sendRequest(`${process.env.NEXT_PUBLIC_API_URL}/products/product/new`,formData,"POST")
 
       console.log(data);
       
       alert.success(data.message);
+      setBrand("");
+      setCategory("");
+      setColor("");
+      setDescription("");
+      setDesign("");
+      setFabric("");
+      setIdealFor("");
+      setProductName("");
+      setPrice("");
+      setSize("");
+      setStock("");
+      setImages([]);
+      setImagesPreview([])
       setLoading(false);
     } catch (err: any) {
       console.log(err);

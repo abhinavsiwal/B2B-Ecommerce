@@ -5,6 +5,7 @@ import { Dropdown, Spinner } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../src/hooks/redux-hooks";
 import { setProducts } from "../src/store/Reducers/products";
 import { useAlert } from "react-alert";
+import { sendRequest } from "../src/hooks/request";
 
 const Products = () => {
   const alert = useAlert();
@@ -12,7 +13,7 @@ const Products = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const { products } = useAppSelector((state) => state.productsReducer);
-  const { token } = useAppSelector((state) => state.sellerReducer);
+  const { sellerToken } = useAppSelector((state) => state.sellerReducer);
   useEffect(() => {
     getProducts();
   }, []);
@@ -20,9 +21,7 @@ const Products = () => {
   const getProducts = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/products/products`
-      );
+      const { data } = await sendRequest(`${process.env.NEXT_PUBLIC_API_URL}/products/seller`);
       console.log(data);
       console.log(data.products);
 
@@ -37,7 +36,7 @@ const Products = () => {
   const deleteProductHandler = async (productId: any) => {
     const config = {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${sellerToken}`,
       },
     };
     try {
