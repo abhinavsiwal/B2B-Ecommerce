@@ -61,7 +61,7 @@ const productSchema = new mongoose.Schema({
   },
   fabric: {
     type: String,
-   
+
     trim: true,
   },
   color: {
@@ -70,7 +70,7 @@ const productSchema = new mongoose.Schema({
   },
   size: {
     type: String,
-   
+
     trim: true,
   },
   design: {

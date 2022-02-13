@@ -3,8 +3,10 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { useAlert } from "react-alert";
+import { useAppDispatch,useAppSelector } from "../../src/hooks/redux-hooks";
 import Link from "next/link";
 import Spinner from "../../src/components/Layout/Spinner";
+import {addItemsToCart} from"../../src/store/Reducers/cart"
 
 const ProductDetail = () => {
   const alert = useAlert();
@@ -13,12 +15,16 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(false);
   const [productAvalability, setProductAvalability] = useState(true);
   const [qty, setQty] = useState(1);
+  const dispatch = useAppDispatch();
+  const {cartItems} = useAppSelector(state=>state.cartReducer);
   let productId;
 
   useEffect(() => {
     productId = router.query.productId;
+    console.log(router.query); 
+    
     console.log(productId);
-
+    
     getProductById(productId);
     if (product.stock === 0) {
       setProductAvalability(false);
@@ -26,6 +32,14 @@ const ProductDetail = () => {
       setProductAvalability(true);
     }
   }, []);
+
+
+useEffect(() => {
+  console.log(cartItems);  
+  
+
+}, [cartItems])
+
 
   const getProductById = async (productId: any) => {
     try {
@@ -42,6 +56,32 @@ const ProductDetail = () => {
       setLoading(false);
     }
   };
+
+  const addItemsCart=(e:any)=>{
+    e.preventDefault();
+    interface itemState{
+      id:string,
+      name:string,
+      price:number,
+      image:string,
+      stock:number,
+      quantity:number,
+    }
+    let item:itemState = {
+      id:product._id,
+      name:product.name,
+      price:product.price,
+      image:product.images[0].url,
+      stock:product.stock,
+      quantity:qty, 
+    }
+    console.log("clicked");
+      console.log(item);
+      console.log(product);
+      
+      
+    dispatch(addItemsToCart(item))
+  }
 
   return (
     <React.Fragment>
@@ -230,6 +270,7 @@ const ProductDetail = () => {
                         <select
                           className="form-select me-3"
                           style={{ width: "5rem" }}
+                          onChange={e=>setQty(Number(e.target.value))}
                         >
                           <option value="1">1</option>
                           <option value="2">2</option>
@@ -239,7 +280,7 @@ const ProductDetail = () => {
                         </select>
                         <button
                           className="btn btn-primary btn-shadow d-block w-100"
-                          type="submit"
+                          onClick={addItemsCart}
                         >
                           <i className="ci-cart fs-lg me-2"></i>Add to Cart
                         </button>
