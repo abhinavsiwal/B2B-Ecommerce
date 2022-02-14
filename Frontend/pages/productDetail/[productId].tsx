@@ -66,6 +66,7 @@ useEffect(() => {
       image:string,
       stock:number,
       quantity:number,
+      inStock:boolean,
     }
     let item:itemState = {
       id:product._id,
@@ -73,11 +74,9 @@ useEffect(() => {
       price:product.price,
       image:product.images[0].url,
       stock:product.stock,
+      inStock:true,
       quantity:qty, 
     }
-    console.log("clicked");
-      console.log(item);
-      console.log(product);
       
       
     dispatch(addItemsToCart(item))
