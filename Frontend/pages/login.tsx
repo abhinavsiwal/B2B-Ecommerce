@@ -89,7 +89,7 @@ const Login = () => {
   };
 
   return (
-    <React.Fragment>
+    <div className="authContainerOuter">
       <div className="authContainer"> 
         <div className="card border-0 shadow">
           <div className="card-body">
@@ -185,7 +185,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </div>
   );
 };
 

@@ -15,11 +15,17 @@ a {
   box-sizing: border-box;
 }
 
+.authContainerOuter{
+  height: 80vh;
+}
+
 .authContainer{
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: 2rem;
+  align-items: center;
+  margin-top: 6rem;
+  padding: 4rem;
 }
 
 .signupContainer{
@@ -121,4 +127,10 @@ a {
   align-items: center;
   height: 80vh;
   width: 100vw;
+}
+
+
+.navbarLogo{
+  height: 75px;
+  width: 75px;
 }

@@ -10,6 +10,7 @@ import {
   getTotal,
 } from "../src/store/Reducers/cart";
 import { useAlert } from "react-alert";
+import Link from "next/link";
 const Cart = () => {
     const alert = useAlert();
   const dispatch = useAppDispatch();
@@ -318,12 +319,14 @@ const Cart = () => {
                     </div>
                   </div>
                 </div>
+                <Link href={'/checkoutDetails'} >
                 <a
                   className="btn btn-primary btn-shadow d-block w-100 mt-4"
                   href="checkout-details.html"
-                >
+                  >
                   <i className="ci-card fs-lg me-2"></i>Proceed to Checkout
                 </a>
+                  </Link>
               </div>
             </div>
           </aside>

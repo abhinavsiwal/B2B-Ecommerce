@@ -14,12 +14,14 @@ interface cartState {
   cartItems: [];
   cartTotalQuantity: Number;
   cartTotalAmount: Number;
+  shippingInfo:{};
 }
 
 const initialState: cartState = {
   cartItems: [],
   cartTotalQuantity: 0,
   cartTotalAmount: 0,
+  shippingInfo:{},
 };
 
 export const cartSlice = createSlice({
@@ -91,6 +93,9 @@ export const cartSlice = createSlice({
       state.cartTotalQuantity = quantity;
       state.cartTotalAmount = total;
     },
+    setShippingInfo:(state, action: PayloadAction<{}>)=>{
+      state.shippingInfo=action.payload;
+    }
   },
 });
 
@@ -101,5 +106,6 @@ export const {
   increaseCart,
   clearCart,
   getTotal,
+  setShippingInfo
 } = cartSlice.actions;
 export default cartSlice.reducer;

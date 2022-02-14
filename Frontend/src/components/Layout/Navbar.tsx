@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux-hooks";
 import { getTotal,removeFromCart } from "../../store/Reducers/cart";
@@ -84,18 +85,24 @@ const Navbar = () => {
         <div className="navbar-sticky bg-light">
           <div className="navbar navbar-expand-lg navbar-light">
             <div className="container-fluid">
+              <Link href="/">
+
               <a
                 className="navbar-brand d-none d-sm-block flex-shrink-0"
-                href="index-2.html"
-              >
-                <img src="img/logo-dark.png" width="142" alt="Cartzilla" />
+                href="#"
+                >
+                <img src="/img/logo.jpg" width="142" alt="Cartzilla" className="navbarLogo" />
               </a>
+                </Link>
+                <Link href="/">
+
               <a
                 className="navbar-brand d-sm-none flex-shrink-0 me-2"
-                href="index-2.html"
-              >
-                <img src="img/logo-icon.png" width="74" alt="Cartzilla" />
+                href="#"
+                >
+                <img src="/img/logo.jpg" width="74" alt="Cartzilla" />
               </a>
+                </Link>
               <div className="input-group d-none d-lg-flex mx-4">
                 <input
                   className="form-control rounded-end pe-5"
@@ -116,11 +123,11 @@ const Navbar = () => {
                 <a className="navbar-tool navbar-stuck-toggler" href="#">
                   <span className="navbar-tool-tooltip">Expand menu</span>
                 </a>
+                <Link href="/login">
                 <a
                   className="navbar-tool ms-1 ms-lg-0 me-n1 me-lg-2"
-                  href="#signin-modal"
-                  data-bs-toggle="modal"
-                >
+                  href="#"
+                  >
                   <div className="navbar-tool-icon-box">
                     <i className="navbar-tool-icon ci-user"></i>
                   </div>
@@ -128,17 +135,22 @@ const Navbar = () => {
                     <small>Hello, Sign in</small>My Account
                   </div>
                 </a>
+                  </Link>
                 <div className="navbar-tool dropdown ms-3">
+                  <Link href="/cart">
                   <a
                     className="navbar-tool-icon-box bg-secondary dropdown-toggle"
-                    href="shop-cart.html"
-                  >
+                    href="#"
+                    >
                     <span className="navbar-tool-label">{cartTotalQuantity}</span>
                     <i className="navbar-tool-icon ci-cart"></i>
                   </a>
+                    </Link>
+                    <Link href="/cart">
                   <a className="navbar-tool-text" href="shop-cart.html">
                     <small>My Cart</small>₹{cartTotalAmount}
                   </a>
+                    </Link>
                   {/* <!-- Cart dropdown--> */}
                   <div className="dropdown-menu dropdown-menu-end">
                     <div
@@ -183,7 +195,7 @@ const Navbar = () => {
                                       <span className="text-accent me-2">
                                       ₹{cartItem.price}
                                       </span>
-                                      <span className="text-muted">x 1</span>
+                                      <span className="text-muted">x {cartItem.quantity}</span>
                                     </div>
                                   </div>
                                 </div>
@@ -198,21 +210,25 @@ const Navbar = () => {
                           ₹{cartTotalAmount}
                           </span>
                         </div>
+                        <Link href="/cart">
                         <a
                           className="btn btn-outline-secondary btn-sm"
                           href="shop-cart.html"
-                        >
+                          >
                           Expand cart
                           <i className="ci-arrow-right ms-1 me-n1"></i>
                         </a>
+                          </Link>
                       </div>
+                      <Link href="/checkoutDetails">
                       <a
                         className="btn btn-primary btn-sm d-block w-100"
                         href="checkout-details.html"
-                      >
+                        >
                         <i className="ci-card me-2 fs-base align-middle"></i>
                         Checkout
                       </a>
+                        </Link>
                     </div>
                   </div>
                 </div>
