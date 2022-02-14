@@ -13,7 +13,7 @@ import { useAlert } from "react-alert";
 const Cart = () => {
     const alert = useAlert();
   const dispatch = useAppDispatch();
-  const { cartItems, cartTotalAmount, cartTotalQuantity } = useAppSelector(
+  const { cartItems, cartTotalAmount, } = useAppSelector(
     (state) => state.cartReducer
   );
 
