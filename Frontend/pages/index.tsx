@@ -60,6 +60,8 @@ const Home: NextPage = () => {
       stock:number,
       quantity:number,
       inStock:boolean,
+      seller:string,
+      product:string,
     }
     let item:itemState = {
       id:product._id,
@@ -68,7 +70,9 @@ const Home: NextPage = () => {
       image:product.images[0].url,
       stock:product.stock,
       inStock:true,
-      quantity:1, 
+      quantity:1,
+      seller:product.seller, 
+      product:product._id,
     }
     dispatch(addItemsToCart(item));
     alert.success(`${item.name} successfully added to cart`)

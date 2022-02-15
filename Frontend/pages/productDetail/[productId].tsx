@@ -67,6 +67,9 @@ useEffect(() => {
       stock:number,
       quantity:number,
       inStock:boolean,
+      seller:string,
+      product:string,
+
     }
     let item:itemState = {
       id:product._id,
@@ -76,6 +79,8 @@ useEffect(() => {
       stock:product.stock,
       inStock:true,
       quantity:qty, 
+      seller:product.seller,
+      product:product._id,
     }
       
       

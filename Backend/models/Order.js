@@ -68,34 +68,37 @@ const orderSchema = new mongoose.Schema({
     },
   ],
   paymentInfo: {
-    id: {
+    orderCreationId: {
       type: String,
     },
-    status: {
+    razorpayOrderId: {
       type: String,
     },
+    razorpayPaymentId: {
+      type: String,
+    },
+    razorpaySignature: {
+      type: String,
+    },
+
   },
   paidAt: {
     type: Date,
   },
   itemsPrice: {
     type: Number,
-    required: true,
     default: 0,
   },
   taxPrice: {
     type: Number,
-    required: true,
     default: 0,
   },
   shippingPrice: {
     type: Number,
-    required: true,
     default: 0.0,
   },
   totalPrice: {
     type: Number,
-    required: true,
     default: 0.0,
   },
   orderStatus: {
@@ -110,4 +113,7 @@ const orderSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+
 });
+
+module.exports = mongoose.model("Order", orderSchema);

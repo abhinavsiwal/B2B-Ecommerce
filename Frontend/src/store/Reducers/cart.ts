@@ -8,6 +8,8 @@ interface itemState {
   stock: number;
   quantity: number;
   inStock: boolean;
+  seller:string;
+  product:string,
 }
 
 interface cartState {

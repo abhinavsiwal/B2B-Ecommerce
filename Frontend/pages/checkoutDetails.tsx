@@ -54,6 +54,7 @@ const CheckoutDetails = () => {
   )
 
   const shippingInfoHandler = () => {
+    
     let shippingInfo = {
       firstName,
       lastName,
@@ -66,7 +67,7 @@ const CheckoutDetails = () => {
     console.log(shippingInfo);
 
     dispatch(setShippingInfo(shippingInfo));
-    displayRazorpay(cartTotalAmount,shippingInfo,userDetails)
+    displayRazorpay(cartTotalAmount,shippingInfo,userDetails,cartItems)
   };
 
   return (

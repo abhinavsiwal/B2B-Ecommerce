@@ -9,14 +9,16 @@ export const sendRequest = (
   method: Method = "GET" // default method get
 ) => {
   // e.preventDefault();
+  let token = JSON.parse(
+    JSON.parse(localStorage.getItem("persist:root") as any).userReducer
+  ).token;
+  console.log(token);
   const headers = {
-    "Content-Type": "application/json",
-    Authorization: `Token ${
-      JSON.parse(
-        JSON.parse(localStorage.getItem("persist:root") as any).userReducer
-      ).sellerToken
-    }`,
+    "Content-Type": "multipart/form-data",
+    Authorization: `Bearer ${token}`,
   };
+  console.log(body);
+  
   return axios({ method: method, url: url, data: body, headers: headers })
     .then((response) => {
       console.log(response);

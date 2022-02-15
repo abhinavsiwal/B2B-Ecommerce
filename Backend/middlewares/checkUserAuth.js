@@ -3,29 +3,28 @@ const User = require("../models/User");
 const {verifyJwtToken} = require("../utils/token")
 
 exports.isAuthenticatedUser = async(req,res,next)=>{
+
     try{
         const header = req.headers.authorization;
         if(!header){
-            next({status:403,message:"Authorization token missing"})
-            return;
+            return res.status(403).json({message:"Authorization token missing"})
         }
         const token = header.split("Bearer ")[1];
 
         if(!token){
-            next({ status: 403, message:"Token not found" })
-            return
+            console.log("token not found");
+            return res.status(403).json({message:"Token not found"})
         }
         const userId = verifyJwtToken(token,next);
         if(!userId){
-            next({status:403,message:"JWT token not decoded"})
-            return;
+            console.log("Jwt token not decoded");
+            return res.status(403).json({message:"Jwt token not decoded."})
         }
         const user = await User.findById(userId);
         if(!user){
-            next({status:404,message:"User not found."})
-            return;
+            return res.status(404).json({message:"Seller not found"})
         }
-        res.locals.user = user;
+        req.user = user;
         next()
     }catch(err){
         next(err);
