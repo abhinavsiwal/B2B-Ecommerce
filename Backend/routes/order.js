@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {createOrder,paymentCallback} = require("../controllers/payment-controller");
+const {createOrder,paymentCallback} = require("../controllers/order-controller");
 const {isAuthenticatedUser} = require("../middlewares/checkUserAuth");
 
 

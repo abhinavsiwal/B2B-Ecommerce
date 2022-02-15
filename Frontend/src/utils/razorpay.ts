@@ -20,7 +20,8 @@ async function displayRazorpay(
   shippingInfo: any,
   userDetails: any,
   cartItems: any
-) {
+  ) {
+
   const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
 
   if (!res) {
@@ -87,11 +88,18 @@ async function displayRazorpay(
       };
       console.log(data);
 
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
       const result = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/order/payment/status`,
         data,
         config
       );
+
 
       alert(result.data.message);
     },
