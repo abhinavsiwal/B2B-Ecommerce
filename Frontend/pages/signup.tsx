@@ -4,6 +4,7 @@ import axios from "axios";
 import { useAlert } from "react-alert";
 import { useAppDispatch,useAppSelector } from "../src/hooks/redux-hooks";
 import { setToken,setIsLoggedIn,setUserDetails } from "../src/store/Reducers/user";
+import Link from "next/link";
 const Signup = () => {
   const router = useRouter();
   const alert = useAlert();
@@ -272,6 +273,7 @@ const Signup = () => {
                 </div>
              
               </div>
+              <p>Already have a account? {" "} <Link href="/login"><a href="#">Login </a></Link>  Instead</p>
             </form>
           </div>
         </div>

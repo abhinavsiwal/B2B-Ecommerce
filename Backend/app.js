@@ -18,10 +18,12 @@ app.use(fileUpload())
 const products = require('./routes/product');
 const user = require('./routes/user');
 const seller = require('./routes/seller');
+const order = require('./routes/order')
 
 app.use('/products',products);
 app.use('/user',user);
 app.use('/seller',seller);
+app.use('/order',order);
 
 // Page not found middleware
 app.use("*", (req, res, next) => {

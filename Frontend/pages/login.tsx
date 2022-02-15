@@ -4,6 +4,7 @@ import {useRouter} from "next/router";
 import { useAlert } from "react-alert";
 import { useAppDispatch,useAppSelector } from "../src/hooks/redux-hooks";
 import { setToken,setIsLoggedIn,setUserDetails } from "../src/store/Reducers/user";
+import Link from "next/link";
 
 const Login = () => {
   const router = useRouter();
@@ -75,7 +76,7 @@ const Login = () => {
         config
       );
       console.log(data);
-      alert.success("User Created Successfully");
+      alert.success(data.message);
       dispatch(setToken(data.token))
       dispatch(setUserDetails(data.userDetails))
       dispatch(setIsLoggedIn(true));
@@ -105,7 +106,7 @@ const Login = () => {
                   type="number"
                   placeholder="Phone no"
                   required
-                  value={phone}
+  
                   onChange={e=>setPhone(e.target.value)}
                   onBlur={phoneBlurHandler}
                 />
@@ -181,6 +182,7 @@ const Login = () => {
                     )}
                   </button>
               </div>
+              <p className="mt-4">Dont have a account? {" "} <Link href="/signup"><a href="#">Signup </a></Link>  Instead</p>
             </form>
           </div>
         </div>

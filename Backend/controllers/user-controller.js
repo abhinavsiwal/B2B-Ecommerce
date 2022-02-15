@@ -137,5 +137,5 @@ exports.verifyOtp = async (req, res, next) => {
     console.log(err);
     return res.status(500).json({ message: "JWT error." });
   }
-  res.status(201).json({ token, userDetails: user });
+  res.status(201).json({ token,message:"User Logged In Successfully", userDetails: user });
 };

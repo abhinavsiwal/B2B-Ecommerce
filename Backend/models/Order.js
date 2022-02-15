@@ -29,6 +29,7 @@ const orderSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
+  
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -44,6 +45,7 @@ const orderSchema = new mongoose.Schema({
       quantity: {
         type: Number,
         required: true,
+        default:1,
       },
       image: {
         type: String,
@@ -53,6 +55,11 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         required: true,
       },
+      seller:{
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "User",
+    },
       product: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,

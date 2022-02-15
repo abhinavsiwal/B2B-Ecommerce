@@ -172,7 +172,7 @@ const Home: NextPage = () => {
                           className="col-lg-3 col-md-4 col-sm-6 px-2 mb-4"
                           key={product._id}
                         >
-                          <div className="card product-card">
+                          <div className="card product-card"  key={product._id} >
                             <button
                               className="btn-wishlist btn-sm"
                               type="button"

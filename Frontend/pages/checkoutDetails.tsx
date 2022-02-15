@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../src/hooks/redux-hooks";
+import { useAlert } from "react-alert";
 import { useRouter } from "next/router";
 import country_state_district from "country_state_district";
 import Link from "next/link";
 import { setShippingInfo } from "../src/store/Reducers/cart";
 
+import displayRazorpay from "../src/utils/razorpay";
+
 const CheckoutDetails = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const alert = useAlert();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [stateId, setStateId] = useState<any>();
@@ -19,10 +23,20 @@ const CheckoutDetails = () => {
   const [address, setAddress] = useState("");
 
   let states = country_state_district.getAllStates();
+
+  const {token}  = useAppSelector(state=>state.userReducer) 
+
+  // useEffect(() => {
+  //   if(!token){
+  //     router.push("/login")
+  //     alert.error("Login First to Checkout.")
+  //   }
+  // }, []);
+
   useEffect(() => {
     setStateId(states[0]);
     setState(states[0].name);
-  }, [states]);
+  }, []);
 
   useEffect(() => {
     let selectedState = states.find((state: any) => stateId <= state.id);
@@ -35,6 +49,9 @@ const CheckoutDetails = () => {
   const { cartItems, cartTotalAmount, cartTotalQuantity } = useAppSelector(
     (state) => state.cartReducer
   );
+  const {userDetails} = useAppSelector(
+    state=>state.userReducer
+  )
 
   const shippingInfoHandler = () => {
     let shippingInfo = {
@@ -49,7 +66,7 @@ const CheckoutDetails = () => {
     console.log(shippingInfo);
 
     dispatch(setShippingInfo(shippingInfo));
-    // router.push('/payment')
+    displayRazorpay(cartTotalAmount,shippingInfo,userDetails)
   };
 
   return (
@@ -317,7 +334,7 @@ const CheckoutDetails = () => {
                   onClick={shippingInfoHandler}
                 >
                   <span className="d-none d-sm-inline">
-                    Proceed to Shipping
+                    Proceed to Payment
                   </span>
                   <span className="d-inline d-sm-none">Next</span>
                   <i className="ci-arrow-right mt-sm-0 ms-1"></i>
