@@ -1,15 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { sendRequest } from "../src/hooks/request";
+import { Dropdown } from "react-bootstrap";
 
 const Orders = () => {
+  useEffect(() => {
+    getOrders();
+  }, []);
+
+  const getOrders = async () => {
+    const { data } = await sendRequest(`${process.env.NEXT_PUBLIC_API_URL}/order/seller`);
+    console.log(data);
+  };
+
   return (
     <section className="content-main">
       <div className="content-header">
         <h2 className="content-title">Orders</h2>
-        <div>
-          <a href="#" className="btn btn-primary">
-            <i className="material-icons md-plus"></i> Create new
-          </a>
-        </div>
       </div>
 
       <div className="card mb-4">
@@ -75,27 +81,10 @@ const Orders = () => {
                     <a href="#" className="btn btn-light">
                       Detail
                     </a>
-                    <div className="dropdown">
-                      <a
-                        href="#"
-                        data-bs-toggle="dropdown"
-                        className="btn btn-light"
-                      >
-                        {" "}
-                        <i className="material-icons md-more_horiz"></i>{" "}
-                      </a>
-                      <div className="dropdown-menu">
-                        <a className="dropdown-item" href="#">
-                          View detail
-                        </a>
-                        <a className="dropdown-item" href="#">
-                          Edit info
-                        </a>
-                        <a className="dropdown-item text-danger" href="#">
-                          Delete
-                        </a>
-                      </div>
-                    </div>
+                    <a href="#" className="btn btn-light">
+                      Edit
+                    </a>
+                   
                     {/* <!-- dropdown //end --> */}
                   </td>
                 </tr>
