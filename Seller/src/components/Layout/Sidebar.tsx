@@ -49,17 +49,14 @@ const Sidebar = () => {
               </Link>
         
             </li>
-            <li className="menu-item has-submenu">
+            <li className="menu-item">
+              <Link href="/orders">
               <a className="menu-link" href="page-orders-1.html">
                 {" "}
                 <i className="icon material-icons md-shopping_cart"></i>
                 <span className="text">Orders</span>
               </a>
-              <div className="submenu">
-                <a href="page-orders-1.html">Order list 1</a>
-                <a href="page-orders-2.html">Order list 2</a>
-                <a href="page-orders-detail.html">Order detail</a>
-              </div>
+              </Link>
             </li>
             <li className="menu-item has-submenu">
               <a className="menu-link" href="page-sellers-cards.html">
@@ -209,18 +206,22 @@ const Sidebar = () => {
               </a>
             </li>
             <li className="dropdown nav-item">
+              <Link href="/login">
               <a className="dropdown-toggle" data-bs-toggle="dropdown" href="#">
                 {" "}
                 <img
                   className="img-xs rounded-circle"
                   src="images/people/avatar1.jpg"
                   alt="User"
-                />
+                  />
               </a>
+                  </Link>
               <div className="dropdown-menu dropdown-menu-end">
+                <Link href="/login">
                 <a className="dropdown-item" href="#">
                   My profile
                 </a>
+                </Link>
                 <a className="dropdown-item" href="#">
                   Settings
                 </a>
