@@ -14,12 +14,14 @@ import storage from "redux-persist/lib/storage";
 import { PersistGate } from "redux-persist/integration/react";
 import userReducer from "./Reducers/user";
 import productsReducer from "./Reducers/products";
-import cartReducer from './Reducers/cart'
+import cartReducer from './Reducers/cart';
+import ordersReducer from './Reducers/orders';
 
 const reducers = combineReducers({
   userReducer,
   productsReducer,
   cartReducer,
+  ordersReducer,
 });
 
 const persistConfig = {
