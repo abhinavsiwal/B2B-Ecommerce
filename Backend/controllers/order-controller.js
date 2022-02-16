@@ -2,6 +2,7 @@ const Razorpay = require("razorpay");
 const uniqId = require("uniqid");
 const crypto = require("crypto");
 const Order = require("../models/Order");
+const User = require("../models/User");
 
 let instance = new Razorpay({
   key_id: process.env.RAZORPAY_KEY,
@@ -72,6 +73,7 @@ exports.paymentCallback = async (req, res, next) => {
       // order = await Order.findByIdAndUpdate(dbOrderId,paymentInfo)
       order = await Order.findById(dbOrderId);
       order.paymentInfo = paymentInfo;
+      order.paidAt = Date.now();
       await order.save();
     } catch (err) {
       console.log(err);
@@ -91,7 +93,7 @@ exports.paymentCallback = async (req, res, next) => {
 exports.getSingleOrder = async (req, res, next) => {
   let order;
   try {
-    order = await Order.findById(req.params.id).populate("user", "name email");
+    order = await Order.findById(req.params.id);
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: "Failed Getting Orders" });
@@ -99,6 +101,18 @@ exports.getSingleOrder = async (req, res, next) => {
   if (!order) {
     return res.status(404).json({ message: "No order found with this id" });
   }
+
+  let userId = order.user;
+  let user;
+  try {
+    user = await User.findById(userId);
+  } catch (err) {
+    console.log(err);
+    return res.status(404).json({ message: "Getting User Details failed" });
+  }
+
+  order.user = user;
+
   return res.status(200).json({
     success: true,
     order,
@@ -117,8 +131,103 @@ exports.usersOrders = async (req, res, next) => {
   if (!orders) {
     return res.status(404).json({ message: "No order found with this id" });
   }
+
   res.status(200).json({
     success: true,
     orders,
+  });
+};
+
+// @route    GET api/orders/:seller_id
+// @desc     show orders on the DashBoard
+// @access   Private
+exports.sellerOrders = async (req, res, next) => {
+  let sellerId = req.seller._id;
+
+  let orders;
+  try {
+    orders = await Order.find({
+      "orderItmes.seller": sellerId,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Failed Getting Orders" });
+  }
+
+  if (!orders) {
+    return res.status(404).json({ message: "No order found with this id" });
+  }
+
+  for (let i = 0; i < orders.length; i++) {
+    let userId = orders[i].user;
+    let user;
+    try {
+      user = await User.findById(userId);
+    } catch (err) {
+      console.log(err);
+      return res.status(404).json({ message: "Getting User Details failed" });
+    }
+
+    orders[i].user = user;
+  }
+
+  res.status(200).json({
+    success: true,
+    orders,
+  });
+};
+
+//   Get all orders =>Admin
+exports.allOrders = async (req, res, next) => {
+  let orders;
+  try {
+    orders = await Order.find();
+  } catch (err) {
+    console.log(err);
+  }
+  if (!orders) {
+    return res.status(404).json({ message: "No order found with this id" });
+  }
+  let totalAmount = 0;
+  orders.forEach((order) => {
+    totalAmount += order.totalPrice;
+  });
+  res.status(200).json({
+    success: true,
+    totalAmount,
+    orders,
+  });
+};
+
+// Update Order Status
+exports.updateOrder = async (req, res, next) => {
+  console.log(req.body);
+  let order;
+  try {
+    order = await Order.findById(req.params.id);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Failed Getting Orders" });
+  }
+
+  if (order.orderStatus === "Delivered") {
+    return res
+      .status(404)
+      .json({ message: "You have already delivered the order" });
+  }
+  (order.orderStatus = req.body.status), (order.deliveredAt = Date.now());
+
+  try {
+    await order.save();
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(404)
+      .json({ message: "Something went wrong in saving order" });
+  }
+
+  res.status(200).json({
+    success: true,
+    message:"Order Status Changed"
   });
 };

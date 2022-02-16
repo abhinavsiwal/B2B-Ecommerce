@@ -27,7 +27,7 @@ const UpdateProduct = () => {
     const [proId, setProId] = useState<any>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { token } = useAppSelector((state) => state.sellerReducer);
+  const { sellerToken } = useAppSelector((state) => state.sellerReducer);
 
   const categories = [
     "Shirt",
@@ -116,7 +116,7 @@ const UpdateProduct = () => {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${sellerToken}`,
       },
     };
 

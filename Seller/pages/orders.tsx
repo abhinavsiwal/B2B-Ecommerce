@@ -1,15 +1,39 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { sendRequest } from "../src/hooks/request";
-import { Dropdown } from "react-bootstrap";
+import { useAppDispatch, useAppSelector } from "../src/hooks/redux-hooks";
+import { setOrders } from "../src/store/Reducers/orders";
+import { useAlert } from "react-alert";
+import { Spinner } from "react-bootstrap";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 const Orders = () => {
+  const dispatch = useAppDispatch();
+  const alert = useAlert();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const { orders } = useAppSelector((state) => state.ordersReducer);
+
   useEffect(() => {
+      console.log("Inside Useeffect");
+      
     getOrders();
   }, []);
 
   const getOrders = async () => {
-    const { data } = await sendRequest(`${process.env.NEXT_PUBLIC_API_URL}/order/seller`);
-    console.log(data);
+    try {
+      setLoading(true);
+      const { data } = await sendRequest(
+        `${process.env.NEXT_PUBLIC_API_URL}/order/seller`
+      );
+      console.log(data);
+      dispatch(setOrders(data.orders));
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+      alert.error("Something went wrong");
+      setLoading(false);
+    }
   };
 
   return (
@@ -30,9 +54,9 @@ const Orders = () => {
             </div>
             <div className="col-lg-2 col-6 col-md-3">
               <select className="form-select">
-                <option>Status</option>
-                <option>Active</option>
-                <option>Disabled</option>
+                <option>Processing</option>
+                <option>Delivered</option>
+                <option>Cancelled</option>
                 <option>Show all</option>
               </select>
             </div>
@@ -64,30 +88,68 @@ const Orders = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>0901</td>
-                  <td>
-                    <b>Marvin McKinney</b>
-                  </td>
-                  <td>marvin@example.com</td>
-                  <td>$9.00</td>
-                  <td>
-                    <span className="badge rounded-pill alert-warning">
-                      Pending
-                    </span>
-                  </td>
-                  <td>03.12.2020</td>
-                  <td className="text-end">
-                    <a href="#" className="btn btn-light">
-                      Detail
-                    </a>
-                    <a href="#" className="btn btn-light">
-                      Edit
-                    </a>
-                   
-                    {/* <!-- dropdown //end --> */}
-                  </td>
-                </tr>
+                {loading ? (
+                  <Spinner
+                    animation="border"
+                    role="status"
+                    variant="info"
+                    style={{ marginTop: "2rem", margin: "auto" }}
+                  >
+                    <span className="visually-hidden">Loading...</span>
+                  </Spinner>
+                ) : (
+                  <React.Fragment>
+                    {orders &&
+                      orders.map((order: any) => {
+                        let processing = order.orderStatus === "processing";
+                        let delivered = order.orderStatus === "delivered";
+                        let cancelled = order.orderStatus === "cancelled";
+
+                        let pillClass;
+                        if (processing) {
+                          pillClass = "alert-warning";
+                        }
+                        if (delivered) {
+                          pillClass = "alert-success";
+                        }
+                        if (cancelled) {
+                          pillClass = "alert-danger";
+                        }
+
+                        return (
+                          <tr>
+                            <td>{order._id}</td>
+                            <td>
+                              <b>
+                                { order.shippingInfo && order.shippingInfo.firstName +
+                                  " " +
+                                  order.shippingInfo.lastName}
+                              </b>
+                            </td>
+                            <td>{ order.user && order.user.phone}</td>
+                            <td>₹{order.totalPrice}</td>
+                            <td>
+                              <span
+                                className={`badge rounded-pill ${pillClass}`}
+                              >
+                                {order.orderStatus}
+                              </span>
+                            </td>
+                            <td>{order.createdAt}</td>
+                            <td className="text-end">
+                              <Link href={`/orderDetail/${order._id}`}>
+                                <a href="#" className="btn btn-light">
+                                  Detail
+                                </a>
+                              </Link>
+ 
+                              {/* <!-- dropdown //end --> */}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  </React.Fragment>
+                )}
               </tbody>
             </table>
           </div>
