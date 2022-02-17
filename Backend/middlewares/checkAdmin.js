@@ -9,8 +9,8 @@ exports.isAdmin = (req, res, next) => {
   try {
     seller = await Seller.findById(sellerId);
   } catch (err) {
+      console.log(err);
     return res.status(404).json({ message: "Seller not found" });
-    console.log(err);
   }
 
   if (seller.role !== "admin") {

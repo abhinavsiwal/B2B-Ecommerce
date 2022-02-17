@@ -139,3 +139,22 @@ exports.verifyOtp = async (req, res, next) => {
   }
   res.status(201).json({ token, sellerDetails: seller });
 };
+
+// @route GET /sellers 
+// @desc Get all  sellers
+// @access Private admin
+
+exports.allSellers = async(req,res,next)=>{
+  let sellers;
+  try {
+    sellers = await Seller.find();
+  } catch (err) {
+    console.log(err);
+    
+    return res.status(500).json({ message: "Getting sellers failed" });
+  }
+   res.status(200).json({
+    success: true,
+    sellers,
+  });
+}
