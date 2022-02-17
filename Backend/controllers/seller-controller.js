@@ -54,13 +54,11 @@ exports.signup = async (req, res, next) => {
       .status(500)
       .json({ message: "Signing up falied, Please try again later" });
   }
-  res
-    .status(201)
-    .json({
-      success: true,
-      message: "OTP sent successfully.",
-      userId: createSeller._id,
-    });
+  res.status(201).json({
+    success: true,
+    message: "OTP sent successfully.",
+    userId: createSeller._id,
+  });
 };
 
 // @route POST /login
@@ -107,7 +105,13 @@ exports.login = async (req, res, next) => {
       .status(500)
       .json({ message: "Login falied, Please try again later" });
   }
-  res.status(201).json({ success: true, message: "OTP sent successfully." ,sellerId:existingSeller._id});
+  res
+    .status(201)
+    .json({
+      success: true,
+      message: "OTP sent successfully.",
+      sellerId: existingSeller._id,
+    });
 };
 
 // @route POST /signup
@@ -140,21 +144,74 @@ exports.verifyOtp = async (req, res, next) => {
   res.status(201).json({ token, sellerDetails: seller });
 };
 
-// @route GET /sellers 
+// @route GET /sellers
 // @desc Get all  sellers
 // @access Private admin
 
-exports.allSellers = async(req,res,next)=>{
+exports.allSellers = async (req, res, next) => {
   let sellers;
   try {
     sellers = await Seller.find();
   } catch (err) {
     console.log(err);
-    
+
     return res.status(500).json({ message: "Getting sellers failed" });
   }
-   res.status(200).json({
+  res.status(200).json({
     success: true,
     sellers,
   });
-}
+};
+// @route GET /seller/:id
+// @desc Get Seller Details
+// @access Private admin
+exports.getSellerDetails = async (req, res, next) => {
+  let seller;
+  try {
+    seller = await Seller.findById(req.params.id);
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(500)
+      .json({ message: `Seller does not found with id:${req.params.id}` });
+  }
+  if (!seller) {
+    return res
+      .status(500)
+      .json({ message: `Seller does not found with id:${req.params.id}` });
+  }
+  res.status(200).json({
+    success: true,
+    seller,
+  });
+};
+
+// @route Delete /seller/:id
+// @desc Delete Seller
+// @access Private admin
+exports.deleteSeller = async (req, res, next) => {
+  let seller;
+  try {
+    seller = await User.findById(req.params.id);
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(500)
+      .json({ message: `Seller does not found with id:${req.params.id}` });
+  }
+  if (!seller) {
+    return res
+      .status(500)
+      .json({ message: `Seller does not found with id:${req.params.id}` });
+  }
+  try {
+    await seller.remove();
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: `Error in Deleting Seller` });
+  }
+
+  res.status(200).json({
+    success: true,
+  });
+};
