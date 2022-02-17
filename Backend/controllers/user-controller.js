@@ -139,3 +139,45 @@ exports.verifyOtp = async (req, res, next) => {
   }
   res.status(201).json({ token,message:"User Logged In Successfully", userDetails: user });
 };
+
+// @route Post /logout
+// @desc Logout a user
+// @access Public
+exports.logoutUser = (req,res,next)=>{
+
+}
+
+// Get currently logged in user details
+exports.getUserDetails=async(req,res,next)=>{
+  const user = await User.findById(req.user._id);
+  res.status(200).json({
+    success: true,
+    user,
+  });
+}
+
+
+// Update user profile
+exports.updateProfile=async(req,res,next)=>{
+  const {name} = req.body;
+  const newUserData = {
+    name:name,
+  }
+  let user;
+  try {
+     user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Update User Failed" });
+  }
+  res.status(200).json({
+    success: true,
+    user,
+    message: "User updated Successfull",
+  });
+
+}
