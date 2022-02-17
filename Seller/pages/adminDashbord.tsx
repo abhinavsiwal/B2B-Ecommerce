@@ -1,10 +1,6 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import React, { useEffect } from "react";
-import styles from "../styles/Home.module.css";
+import React from "react";
 
-const Home: NextPage = () => {
+const AdminDashboard = () => {
   return (
     <React.Fragment>
       <section className="content-main">
@@ -370,4 +366,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default AdminDashboard;

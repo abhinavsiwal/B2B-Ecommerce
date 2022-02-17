@@ -1,6 +1,6 @@
 const Seller = require("../models/Seller");
 
-exports.isAdmin = (req, res, next) => {
+exports.isAdmin =async (req, res, next) => {
   let sellerId = req.seller._id;
   console.log(sellerId);
 

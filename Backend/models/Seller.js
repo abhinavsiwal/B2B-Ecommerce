@@ -33,6 +33,10 @@ const sellerSchema = new mongoose.Schema({
     type:String,
     default:'seller',
 },
+createdAt:{
+  type: Date,
+  default: Date.now,
+}
 });
 
 module.exports = mongoose.model("Seller", sellerSchema);
