@@ -152,7 +152,7 @@ exports.verifyOtp = async (req, res, next) => {
 exports.logoutUser = (req, res, next) => {};
 
 // Get currently logged in user details
-exports.getUserDetails = async (req, res, next) => {
+exports.loggedInUserDetails = async (req, res, next) => {
   const user = await User.findById(req.user._id);
   res.status(200).json({
     success: true,
@@ -201,6 +201,30 @@ exports.allUser = async (req, res, next) => {
     users,
   });
 };
+
+
+// Get user details
+exports.getUserDetails = async (req, res, next) => {
+  let user;
+  try {
+    user = await User.findById(req.params.id);
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(500)
+      .json({ message: `User does not found with id:${req.params.id}` });
+  }
+  if (!user) {
+    return res
+      .status(500)
+      .json({ message: `User does not found with id:${req.params.id}` });
+  }
+  res.status(200).json({
+    success: true,
+    user,
+  });
+};
+
 
 exports.deleteUser = async (req, res, next) => {
   let user;
