@@ -1,5 +1,5 @@
 const Seller = require("../models/Seller");
-const Product = require("../models/Product")
+const Product = require("../models/Product");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { generateOtp, fast2sms } = require("../utils/otp");
@@ -106,13 +106,11 @@ exports.login = async (req, res, next) => {
       .status(500)
       .json({ message: "Login falied, Please try again later" });
   }
-  res
-    .status(201)
-    .json({
-      success: true,
-      message: "OTP sent successfully.",
-      sellerId: existingSeller._id,
-    });
+  res.status(201).json({
+    success: true,
+    message: "OTP sent successfully.",
+    sellerId: existingSeller._id,
+  });
 };
 
 // @route POST /signup
@@ -185,17 +183,15 @@ exports.getSellerDetails = async (req, res, next) => {
   let products;
 
   try {
-    
-    products = await Product.find({seller:seller._id});
-
+    products = await Product.find({ seller: seller._id });
   } catch (err) {
     console.log(err);
     return res
-    .status(500)
-    .json({ message: `Products does not found with id:${req.params.id}` });
+      .status(500)
+      .json({ message: `Products does not found with id:${req.params.id}` });
   }
 
-  seller.products=products;
+  seller.products = products;
 
   res.status(200).json({
     success: true,
@@ -231,4 +227,14 @@ exports.deleteSeller = async (req, res, next) => {
   res.status(200).json({
     success: true,
   });
+};
+
+// Get Totals
+exports.getTotal = async (req, res, next) => {
+  let users;
+  try {
+    users = await User.find();
+  } catch (err) {
+    
+  }  
 };

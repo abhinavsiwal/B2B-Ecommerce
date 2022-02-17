@@ -19,12 +19,13 @@ const products = require('./routes/product');
 const user = require('./routes/user');
 const seller = require('./routes/seller');
 const order = require('./routes/order')
+const stats = require("./routes/stats")
 
 app.use('/products',products);
 app.use('/user',user);
 app.use('/seller',seller);
 app.use('/order',order);
-
+app.use('/stats',stats);
 // Page not found middleware
 app.use("*", (req, res, next) => {
   const error = {
