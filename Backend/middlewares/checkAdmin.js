@@ -1,8 +1,25 @@
-exports.authorizeRoles=(...roles)=>{
-    return (req,res,next)=>{
-        if(!roles.includes(req.user.role)){
-            return res.status(403).json({message:`Role (${req.user.role}) is not allowed to access this resource`})
-        }
-        next();
-    }
-}
+const Seller = require("../models/Seller");
+
+exports.isAdmin = (req, res, next) => {
+  let sellerId = req.seller._id;
+  console.log(sellerId);
+
+  let seller;
+
+  try {
+    seller = await Seller.findById(sellerId);
+  } catch (err) {
+    return res.status(404).json({ message: "Seller not found" });
+    console.log(err);
+  }
+
+  if (seller.role !== "admin") {
+    return res
+      .status(403)
+      .json({
+        message: `Role (${req.user.role}) is not allowed to access this resource`,
+      });
+  }
+
+  next();
+};
