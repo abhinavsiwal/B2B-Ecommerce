@@ -10,7 +10,7 @@ router.post("/signup",signup);
 router.post("/login",login);
 router.post("/verifyOtp",verifyOtp);
 router.get("/sellers",isAuthenticatedSeller,isAdmin,allSellers);
-router.get("/sellers/:id",isAuthenticatedSeller,isAdmin,getSellerDetails);
+router.get("/seller/:id",isAuthenticatedSeller,isAdmin,getSellerDetails);
 router.delete("/seller/:id",isAuthenticatedSeller,isAdmin,deleteSeller);
 
 

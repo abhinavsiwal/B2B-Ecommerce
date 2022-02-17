@@ -1,4 +1,5 @@
 const Seller = require("../models/Seller");
+const Product = require("../models/Product")
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { generateOtp, fast2sms } = require("../utils/otp");
@@ -180,6 +181,22 @@ exports.getSellerDetails = async (req, res, next) => {
       .status(500)
       .json({ message: `Seller does not found with id:${req.params.id}` });
   }
+
+  let products;
+
+  try {
+    
+    products = await Product.find({seller:seller._id});
+
+  } catch (err) {
+    console.log(err);
+    return res
+    .status(500)
+    .json({ message: `Products does not found with id:${req.params.id}` });
+  }
+
+  seller.products=products;
+
   res.status(200).json({
     success: true,
     seller,
