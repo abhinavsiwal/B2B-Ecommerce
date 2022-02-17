@@ -19,7 +19,7 @@ router.post("/login", login);
 router.post("/verifyOtp", verifyOtp);
 router.get("/user", isAuthenticatedUser, getUserDetails);
 router.put("/update", isAuthenticatedUser, updateProfile);
-// router.get("/users", isAuthenticatedSeller, isAdmin, getAllUsers);
+router.get("/users", isAuthenticatedSeller, isAdmin, getAllUsers);
 router.get("/user/:id",isAuthenticatedSeller, isAdmin, getUserDetails);
 router.delete("/user/:id", isAuthenticatedSeller, isAdmin, deleteUser);
 module.exports = router;

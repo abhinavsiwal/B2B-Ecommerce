@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const Order = require("../models/Order");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { generateOtp, fast2sms } = require("../utils/otp");
@@ -105,13 +106,11 @@ exports.login = async (req, res, next) => {
       .status(500)
       .json({ message: "Login falied, Please try again later" });
   }
-  res
-    .status(201)
-    .json({
-      success: true,
-      message: "OTP sent successfully.",
-      userId: existingUser._id,
-    });
+  res.status(201).json({
+    success: true,
+    message: "OTP sent successfully.",
+    userId: existingUser._id,
+  });
 };
 
 // @route POST /signup
@@ -188,7 +187,7 @@ exports.updateProfile = async (req, res, next) => {
 // @desc Get all  users
 // @access Private admin
 
-exports.allUser = async (req, res, next) => {
+exports.getAllUsers = async (req, res, next) => {
   let users;
   try {
     users = await User.find();
@@ -196,12 +195,11 @@ exports.allUser = async (req, res, next) => {
     console.log(err);
     return res.status(500).json({ message: "Getting users failed" });
   }
-  return res.status(200).json({
+  res.status(200).json({
     success: true,
     users,
   });
 };
-
 
 // Get user details
 exports.getUserDetails = async (req, res, next) => {
@@ -219,12 +217,23 @@ exports.getUserDetails = async (req, res, next) => {
       .status(500)
       .json({ message: `User does not found with id:${req.params.id}` });
   }
+  let orders;
+  try {
+    orders = await Order.find({ user: user._id });
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(500)
+      .json({ message: `Orders does not found with id:${req.params.id}` });
+  }
+  user.orders = orders;
+
   res.status(200).json({
     success: true,
     user,
+    orders
   });
 };
-
 
 exports.deleteUser = async (req, res, next) => {
   let user;
