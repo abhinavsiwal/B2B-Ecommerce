@@ -54,13 +54,11 @@ exports.signup = async (req, res, next) => {
       .status(500)
       .json({ message: "Signing up falied, Please try again later" });
   }
-  res
-    .status(201)
-    .json({
-      success: true,
-      message: "OTP sent successfully.",
-      userId: createUser._id,
-    });
+  res.status(201).json({
+    success: true,
+    message: "OTP sent successfully.",
+    userId: createUser._id,
+  });
 };
 
 // @route POST /login
@@ -107,7 +105,13 @@ exports.login = async (req, res, next) => {
       .status(500)
       .json({ message: "Login falied, Please try again later" });
   }
-  res.status(201).json({ success: true, message: "OTP sent successfully." ,userId:existingUser._id});
+  res
+    .status(201)
+    .json({
+      success: true,
+      message: "OTP sent successfully.",
+      userId: existingUser._id,
+    });
 };
 
 // @route POST /signup
@@ -137,35 +141,34 @@ exports.verifyOtp = async (req, res, next) => {
     console.log(err);
     return res.status(500).json({ message: "JWT error." });
   }
-  res.status(201).json({ token,message:"User Logged In Successfully", userDetails: user });
+  res
+    .status(201)
+    .json({ token, message: "User Logged In Successfully", userDetails: user });
 };
 
 // @route Post /logout
 // @desc Logout a user
 // @access Public
-exports.logoutUser = (req,res,next)=>{
-
-}
+exports.logoutUser = (req, res, next) => {};
 
 // Get currently logged in user details
-exports.getUserDetails=async(req,res,next)=>{
+exports.getUserDetails = async (req, res, next) => {
   const user = await User.findById(req.user._id);
   res.status(200).json({
     success: true,
     user,
   });
-}
-
+};
 
 // Update user profile
-exports.updateProfile=async(req,res,next)=>{
-  const {name} = req.body;
+exports.updateProfile = async (req, res, next) => {
+  const { name } = req.body;
   const newUserData = {
-    name:name,
-  }
+    name: name,
+  };
   let user;
   try {
-     user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+    user = await User.findByIdAndUpdate(req.user.id, newUserData, {
       new: true,
       runValidators: true,
       useFindAndModify: false,
@@ -179,5 +182,48 @@ exports.updateProfile=async(req,res,next)=>{
     user,
     message: "User updated Successfull",
   });
+};
 
-}
+// @route GET /users
+// @desc Get all  users
+// @access Private admin
+
+exports.allUser = async (req, res, next) => {
+  let users;
+  try {
+    users = await User.find();
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Getting users failed" });
+  }
+  return res.status(200).json({
+    success: true,
+    users,
+  });
+};
+
+exports.deleteUser = async (req, res, next) => {
+  let user;
+  try {
+    user = await User.findById(req.params.id);
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(500)
+      .json({ message: `User does not found with id:${req.params.id}` });
+  }
+  if (!user) {
+    return res
+      .status(500)
+      .json({ message: `User does not found with id:${req.params.id}` });
+  }
+  //Remove Avatar from Cloudnary -todo
+  try {
+    await user.remove();
+  } catch (err) {
+    console.log(err);
+  }
+  res.status(200).json({
+    success: true,
+  });
+};
