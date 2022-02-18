@@ -239,8 +239,16 @@ exports.sellerOrderDetails = async (req, res, next) => {
 
   order.user = user;
 
-
-console.log(order);
+  let sellerOrderItems={};
+  let totalAmount=0;
+  sellerOrderItems = order.orderItems.filter(item=>item.seller.toString()===sellerId.toString());
+  sellerOrderItems.forEach(item=>{
+    totalAmount+=item.quantity*item.price;
+  })
+  // console.log(sellerOrder);
+  order.orderItems = sellerOrderItems;
+  order.totalPrice=totalAmount;
+// console.log(order);
 
   res.status(200).json({
     success: true,

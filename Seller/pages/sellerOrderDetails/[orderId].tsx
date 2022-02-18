@@ -19,7 +19,7 @@ const OrderDetail = () => {
   const getOrder = async (orderId: any) => {
     try {
       setLoading(true);
-      const { data } = await axios.get(
+      const { data } = await sendRequest(
         `${process.env.NEXT_PUBLIC_API_URL}/order/sellerOrderDetails/${orderId}`
       );
       console.log(data);
