@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { sendRequest } from "../../src/hooks/request";
 import { useRouter } from "next/router";
 import { useAlert } from "react-alert";
+import Link from "next/link";
 const SellerDetails = () => {
   const router = useRouter();
   const alert = useAlert();
@@ -30,9 +31,11 @@ const SellerDetails = () => {
   return (
     <section className="content-main">
       <div className="content-header">
+        <Link href="/adminSellers" >
         <a href="javascript:history.back()" className="btn btn-light">
           <i className="material-icons md-arrow_back"></i> Go back
         </a>
+        </Link>
       </div>
 
       <div className="card mb-4">
@@ -108,7 +111,7 @@ const SellerDetails = () => {
             {seller.products &&
               seller.products.map((product: any) => {
                 return (
-                  <div className="col-xl-3 col-lg-4 col-md-6">
+                  <div className="col-xl-3 col-lg-4 col-md-6" key={seller._id} >
                     <div className="card card-product-grid">
                       <a href="#" className="img-wrap">
                         {" "}

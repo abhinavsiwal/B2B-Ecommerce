@@ -196,6 +196,7 @@ exports.getSellerDetails = async (req, res, next) => {
   res.status(200).json({
     success: true,
     seller,
+    totalProducts:products.length,
   });
 };
 

@@ -228,10 +228,21 @@ exports.getUserDetails = async (req, res, next) => {
   }
   user.orders = orders;
 
+  let revenue=0;
+  orders.forEach(order=>{
+    revenue+=order.totalPrice;
+  })
+
+user.totalOrders = orders.length;
+user.totalRevenue = revenue;
+
   res.status(200).json({
     success: true,
     user,
-    orders
+    orders,
+    totalOrders : orders.length,
+    totalRevenue:revenue,
+
   });
 };
 

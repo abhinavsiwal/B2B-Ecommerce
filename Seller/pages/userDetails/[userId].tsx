@@ -7,7 +7,10 @@ const UserDetails = () => {
   const router = useRouter();
   const alert = useAlert();
   const [user, setUser] = useState<any>({});
-  const [orders, setOrders] = useState<any>({})
+  const [orders, setOrders] = useState<any>([])
+  const [totalOrders, setTotalOrders] = useState<number>();
+  const [totalRevenue, setTotalRevenue] = useState<number>()
+
 
   let userId;
 
@@ -27,6 +30,8 @@ const UserDetails = () => {
       console.log(data);
       setUser(data.user);
       setOrders(data.orders);
+      setTotalOrders(data.totalOrders);
+      setTotalRevenue(data.totalRevenue)
     } catch (err) {
       console.log(err);
       alert.error("Something went wrong");
@@ -36,9 +41,11 @@ const UserDetails = () => {
   return (
     <section className="content-main">
       <div className="content-header">
+        <Link href="/adminUsers">
         <a href="javascript:history.back()" className="btn btn-light">
           <i className="material-icons md-arrow_back"></i> Go back
         </a>
+        </Link>
       </div>
 
       <div className="card mb-4">
@@ -74,9 +81,9 @@ const UserDetails = () => {
             <div className="col-md-12 col-lg-4 col-xl-2">
               <article className="box">
                 <p className="mb-0 text-muted">Total orders:</p>
-                <h5 className="text-success">238</h5>
+                <h5 className="text-success">{totalOrders}</h5>
                 <p className="mb-0 text-muted">Revenue:</p>
-                <h5 className="text-success mb-0">$2380</h5>
+                <h5 className="text-success mb-0">₹{totalRevenue}</h5>
               </article>
             </div>
             {/* <!--  col.// --> */}
@@ -118,7 +125,8 @@ const UserDetails = () => {
               </thead>
               <tbody>
                 
-                    {orders &&
+                    {orders ?(
+
                       orders.map((order: any) => {
                         let processing = order.orderStatus === "processing";
                         let delivered = order.orderStatus === "delivered";
@@ -134,7 +142,7 @@ const UserDetails = () => {
                         if (cancelled) {
                           pillClass = "alert-danger";
                         }
-
+3
                         return (
                           <tr key={order._id}>
                             <td>{order._id}</td>
@@ -150,7 +158,7 @@ const UserDetails = () => {
                             <td>
                               <span
                                 className={`badge rounded-pill ${pillClass}`}
-                              >
+                                >
                                 {order.orderStatus}
                               </span>
                             </td>
@@ -161,12 +169,16 @@ const UserDetails = () => {
                                   Detail
                                 </a>
                                   </Link>
- 
+  
                               {/* <!-- dropdown //end --> */}
                             </td>
                           </tr>
                         );
-                      })}
+                      })
+                      ):(
+                        <p>No orders found.</p>
+                      )
+                    }
                   
                 
               </tbody>

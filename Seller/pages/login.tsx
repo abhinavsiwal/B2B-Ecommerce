@@ -81,7 +81,7 @@ const Login = () => {
       console.log(data);
       alert.success("User Created Successfully");
       dispatch(setToken(data.token));
-      dispatch(setSellerDetails(data.userDetails));
+      dispatch(setSellerDetails(data.sellerDetails));
       dispatch(setIsLoggedIn(true));
       router.push("/");
       setLoading(false);
