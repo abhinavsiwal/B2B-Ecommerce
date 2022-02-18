@@ -82,6 +82,23 @@ exports.getProducts = async (req, res, next) => {
   });
 };
 
+exports.getProductsByCategory=async(req,res,next)=>{
+ let category = req.params.category;
+ let products;
+ try {
+   products = await Product.find({
+     category:category,
+   })
+ } catch (err) {
+   console.log(err);
+   return res.status(500).json({message:"No products found with this category."})
+ } 
+ res.status(200).json({
+   success:true,
+   products
+ })
+}
+
 // @route GET /product/:id
 // @desc Get product by productId
 // @access Public

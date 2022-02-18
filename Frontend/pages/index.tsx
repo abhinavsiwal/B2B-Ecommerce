@@ -21,6 +21,17 @@ const Home: NextPage = () => {
     getAllProducts();
   }, []);
 
+  const categories = [
+    "Shirt",
+    "T Shirt",
+    "Joggers",
+    "Vests",
+    "Knitwear",
+    "Shorts",
+    "Winterwear",
+    "Sportswear",
+  ];
+
   const getAllProducts = async () => {
     try {
       setLoading(true);
@@ -51,32 +62,32 @@ const Home: NextPage = () => {
     }
   };
 
-  const addToCart = (product:any)=>{
-    interface itemState{
-      id:string,
-      name:string,
-      price:number,
-      image:string,
-      stock:number,
-      quantity:number,
-      inStock:boolean,
-      seller:string,
-      product:string,
+  const addToCart = (product: any) => {
+    interface itemState {
+      id: string;
+      name: string;
+      price: number;
+      image: string;
+      stock: number;
+      quantity: number;
+      inStock: boolean;
+      seller: string;
+      product: string;
     }
-    let item:itemState = {
-      id:product._id,
-      name:product.name,
-      price:product.price,
-      image:product.images[0].url,
-      stock:product.stock,
-      inStock:true,
-      quantity:1,
-      seller:product.seller, 
-      product:product._id,
-    }
+    let item: itemState = {
+      id: product._id,
+      name: product.name,
+      price: product.price,
+      image: product.images[0].url,
+      stock: product.stock,
+      inStock: true,
+      quantity: 1,
+      seller: product.seller,
+      product: product._id,
+    };
     dispatch(addItemsToCart(item));
-    alert.success(`${item.name} successfully added to cart`)
-  }
+    alert.success(`${item.name} successfully added to cart`);
+  };
 
   return (
     <React.Fragment>
@@ -99,7 +110,7 @@ const Home: NextPage = () => {
           >
             <Spinner />
           </main>
-        ) : ( 
+        ) : (
           <React.Fragment>
             <main className="page-wrapper">
               {/* <!-- Hero section--> */}
@@ -142,21 +153,14 @@ const Home: NextPage = () => {
                             All categories
                           </button>
                           <div className="dropdown-menu dropdown-menu-end my-1">
-                            <a className="dropdown-item" href="#">
-                              Photos
+                            {categories.map(category=>(
+                              <Link href={`/category/${category}`}>
+                              <a className="dropdown-item" href="#">
+                              {category}
                             </a>
-                            <a className="dropdown-item" href="#">
-                              Graphics
-                            </a>
-                            <a className="dropdown-item" href="#">
-                              UI Design
-                            </a>
-                            <a className="dropdown-item" href="#">
-                              Web Themes
-                            </a>
-                            <a className="dropdown-item" href="#">
-                              Add-Ons
-                            </a>
+                              </Link>
+                              ))}
+                         
                           </div>
                         </div>
                       </div>
@@ -176,7 +180,7 @@ const Home: NextPage = () => {
                           className="col-lg-3 col-md-4 col-sm-6 px-2 mb-4"
                           key={product._id}
                         >
-                          <div className="card product-card"  key={product._id} >
+                          <div className="card product-card" key={product._id}>
                             <button
                               className="btn-wishlist btn-sm"
                               type="button"
@@ -290,7 +294,7 @@ const Home: NextPage = () => {
                               <button
                                 className="btn btn-primary btn-sm d-block w-100 mb-2"
                                 type="button"
-                                onClick={()=>addToCart(product)}
+                                onClick={() => addToCart(product)}
                               >
                                 <i className="ci-cart fs-sm me-1"></i>Add to
                                 Cart
