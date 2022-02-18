@@ -402,7 +402,7 @@ const CheckoutDetails = () => {
                       className="form-control"
                       type="number"
                       id="checkout-zip"
-                      value={pincode}
+        
                       onChange={(e) => setPincode(Number(e.target.value))}
                       required
                     />

@@ -3,13 +3,16 @@ import Spinner from "../../src/components/Layout/Spinner";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useAlert } from "react-alert";
+import { useAppSelector, useAppDispatch } from "../../src/hooks/redux-hooks";
+import { addItemsToCart } from "../../src/store/Reducers/cart";
 const Category = () => {
   const router = useRouter();
   const alert = useAlert();
+  const dispatch = useAppDispatch();
   const [products, setProducts] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  let category: {} | null | undefined;
+  let category: any;
   useEffect(() => {
     category = router.query.category;
     getProducts(category);
@@ -30,6 +33,34 @@ const Category = () => {
     }
   };
 
+  const addToCart = (product: any) => {
+    interface itemState {
+      id: string;
+      name: string;
+      price: number;
+      image: string;
+      stock: number;
+      quantity: number;
+      inStock: boolean;
+      seller: string;
+      product: string;
+    }
+    let item: itemState = {
+      id: product._id,
+      name: product.name,
+      price: product.price,
+      image: product.images[0].url,
+      stock: product.stock,
+      inStock: true,
+      quantity: 1,
+      seller: product.seller,
+      product: product._id,
+    };
+    dispatch(addItemsToCart(item));
+    alert.success(`${item.name} successfully added to cart`);
+  };
+
+  
   return (
     <React.Fragment>
       <div className="page-title-overlap bg-dark pt-4">
@@ -49,13 +80,13 @@ const Category = () => {
                   className="breadcrumb-item text-nowrap active"
                   aria-current="page"
                 >
-                  {category}
+                  Category
                 </li>
               </ol>
             </nav>
           </div>
           <div className="order-lg-1 pe-lg-4 text-center text-lg-start">
-            <h1 className="h3 text-light mb-0">Shop grid left sidebar</h1>
+            <h1 className="h3 text-light mb-0">Category</h1>
           </div>
         </div>
       </div>
@@ -81,29 +112,6 @@ const Category = () => {
                 of {products.length} products
               </span>
             </div>
-          </div>
-          <div className="d-flex pb-3">
-            <a className="nav-link-style nav-link-light me-3" href="#">
-              <i className="ci-arrow-left"></i>
-            </a>
-            <span className="fs-md text-light">1 / 5</span>
-            <a className="nav-link-style nav-link-light ms-3" href="#">
-              <i className="ci-arrow-right"></i>
-            </a>
-          </div>
-          <div className="d-none d-sm-flex pb-3">
-            <a
-              className="btn btn-icon nav-link-style bg-light text-dark disabled opacity-100 me-2"
-              href="#"
-            >
-              <i className="ci-view-grid"></i>
-            </a>
-            <a
-              className="btn btn-icon nav-link-style nav-link-light"
-              href="shop-list-ls.html"
-            >
-              <i className="ci-view-list"></i>
-            </a>
           </div>
         </div>
         {/* <!-- Products grid--> */}
@@ -140,17 +148,15 @@ const Category = () => {
                             className="product-meta d-block fs-xs pb-1"
                             href="#"
                           >
-                              {category}
+                            {category}
                           </a>
                           <h3 className="product-title fs-sm">
-                            <a href="shop-single-v1.html">
-                              {product.name}
-                            </a>
+                            <a href="shop-single-v1.html">{product.name}</a>
                           </h3>
                           <div className="d-flex justify-content-between">
                             <div className="product-price">
                               <span className="text-accent">
-                              ₹{product.price}
+                                ₹{product.price}
                               </span>
                             </div>
                             <div className="star-rating">
@@ -184,7 +190,7 @@ const Category = () => {
                                 type="radio"
                                 name="size1"
                                 id="s-80"
-                                checked
+                                
                               />
                               <label
                                 className="form-option-label"
@@ -225,6 +231,7 @@ const Category = () => {
                           <button
                             className="btn btn-primary btn-sm d-block w-100 mb-2"
                             type="button"
+                            onClick={()=>addToCart(product)}
                           >
                             <i className="ci-cart fs-sm me-1"></i>Add to Cart
                           </button>
