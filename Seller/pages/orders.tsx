@@ -77,7 +77,7 @@ const Orders = () => {
                 <tr>
                   <th>#ID</th>
                   <th scope="col">Name</th>
-                  <th scope="col">Email</th>
+                  <th scope="col">Phone</th>
                   <th scope="col">Total</th>
                   <th scope="col">Status</th>
                   <th scope="col">Date</th>
@@ -137,7 +137,7 @@ const Orders = () => {
                             </td>
                             <td>{order.createdAt}</td>
                             <td className="text-end">
-                              <Link href={`/orderDetail/${order._id}`}>
+                              <Link href={`/sellerOrderDetails/${order._id}`}>
                                 <a href="#" className="btn btn-light">
                                   Detail
                                 </a>

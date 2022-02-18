@@ -10,32 +10,7 @@ let instance = new Razorpay({
 });
 
 exports.createOrder = async (req, res, next) => {
-  const {
-    orderItems,
-    shippingInfo,
-    itemsPrice,
-    taxPrice,
-    shippingPrice,
-    totalPrice,
-  } = req.body;
-  let order;
-  try {
-    order = await Order.create({
-      orderItems,
-      shippingInfo,
-      itemsPrice,
-      taxPrice,
-      shippingPrice,
-      totalPrice,
-      user: req.user._id,
-    });
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({ message: "Order Failed" });
-  }
-
   let payAmount = req.body.totalPrice * 100;
-  console.log(totalPrice);
 
   let options = {
     amount: payAmount, // amount in the smallest currency unit
@@ -47,11 +22,20 @@ exports.createOrder = async (req, res, next) => {
 
   if (!orderDetail) return res.status(500).send("Some error occured");
 
-  res.status(200).json({ success: true, orderDetail, dbOrderId: order._id });
+  res.status(200).json({ success: true, orderDetail });
 };
 
 exports.paymentCallback = async (req, res, next) => {
-  const { paymentInfo, dbOrderId } = req.body;
+  const {
+    orderItems,
+    shippingInfo,
+    itemsPrice,
+    taxPrice,
+    shippingPrice,
+    totalPrice,
+    paymentInfo,
+    dbOrderId,
+  } = req.body;
 
   const {
     orderCreationId,
@@ -59,8 +43,7 @@ exports.paymentCallback = async (req, res, next) => {
     razorpayOrderId,
     razorpaySignature,
   } = paymentInfo;
-  console.log(paymentInfo);
-  console.log(dbOrderId);
+
   try {
     const shasum = crypto.createHmac("sha256", process.env.RAZORPAY_SECRET);
     shasum.update(`${orderCreationId}|${razorpayPaymentId}`);
@@ -68,10 +51,25 @@ exports.paymentCallback = async (req, res, next) => {
     const digest = shasum.digest("hex");
     if (digest !== razorpaySignature)
       return res.status(400).json({ msg: "Transaction not legit!" });
+
     let order;
     try {
-      // order = await Order.findByIdAndUpdate(dbOrderId,paymentInfo)
-      order = await Order.findById(dbOrderId);
+      order = await Order.create({
+        orderItems,
+        shippingInfo,
+        itemsPrice,
+        taxPrice,
+        shippingPrice,
+        totalPrice,
+        user: req.user._id,
+      });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ message: "Order Failed" });
+    }
+
+    try {
+      order = await Order.findById(order._id);
       order.paymentInfo = paymentInfo;
       order.paidAt = Date.now();
       await order.save();
@@ -147,7 +145,7 @@ exports.sellerOrders = async (req, res, next) => {
   let orders;
   try {
     orders = await Order.find({
-      "orderItmes.seller": sellerId,
+      "orderItems.seller": sellerId,
     });
   } catch (err) {
     console.log(err);
@@ -171,9 +169,82 @@ exports.sellerOrders = async (req, res, next) => {
     orders[i].user = user;
   }
 
+  // let sellerOrders=[];
+
+  // orders.forEach(order=>{
+  //   console.log(order);
+  //   order.orderItems.forEach(item=>{
+  //     if(item.seller.toString()===sellerId.toString()){
+  //       let newOrder ={};
+  //       newOrder.user =order.user;
+  //       newOrder.orderStatus = order.orderStatus;
+  //       newOrder.createdAt = order.createdAt;
+  //       newOrder.orderItems = item;
+  //       sellerOrders.push(newOrder);
+  //     }
+  //   })
+  // })
+  orders.sellerOrders = [];
+  let seller = {};
+  let orders1 = [];
+  orders.forEach((order) => {
+    // console.log(order);
+    let sellerOrders = order.orderItems.filter(
+      (item) => item.seller.toString() === sellerId.toString()
+    );
+    let totalAmount = 0;
+    // console.log(sellerOrders);
+    sellerOrders.forEach((item) => {
+      totalAmount += item.quantity * item.price;
+    });
+    seller = {
+      ...order._doc,
+      orderItems: sellerOrders,
+      totalPrice: totalAmount,
+    };
+    orders1.push(seller);
+  });
+  // console.log(sellerOrders);
+  // console.log(sellerOrders.length);
+  // console.log(orders1);
+  // console.log(orders);
+
   res.status(200).json({
     success: true,
-    orders,
+    orders: orders1,
+  });
+};
+
+exports.sellerOrderDetails = async (req, res, next) => {
+  let sellerId = req.seller._id;
+  let order;
+  try {
+    order = await Order.findById(req.params.id);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Failed Getting Orders" });
+  }
+  if (!order) {
+    return res.status(404).json({ message: "No order found with this id" });
+  }
+
+  let userId = order.user;
+  let user;
+  try {
+    user = await User.findById(userId);
+  } catch (err) {
+    console.log(err);
+    return res.status(404).json({ message: "Getting User Details failed" });
+  }
+
+  order.user = user;
+
+
+console.log(order);
+
+  res.status(200).json({
+    success: true,
+    order,
   });
 };
 
@@ -228,6 +299,6 @@ exports.updateOrder = async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    message:"Order Status Changed"
+    message: "Order Status Changed",
   });
 };

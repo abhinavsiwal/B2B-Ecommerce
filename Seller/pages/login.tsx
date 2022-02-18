@@ -109,7 +109,6 @@ const Login = () => {
               placeholder="+91"
               type="number"
               onBlur={phoneBlurHandler}
-              value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />
             <div className="invalid-feedback">

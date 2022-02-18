@@ -25,12 +25,12 @@ const CheckoutDetails = () => {
 
   const {token}  = useAppSelector(state=>state.userReducer) 
 
-  // useEffect(() => {
-  //   if(!token){
-  //     router.push("/login")
-  //     alert.error("Login First to Checkout.")
-  //   }
-  // }, []);
+  useEffect(() => {
+    if(!token){
+      router.push("/login")
+      alert.error("Login First to Checkout.")
+    }
+  }, []);
 
   useEffect(() => {
     setStateId(states[0]);
@@ -39,9 +39,10 @@ const CheckoutDetails = () => {
 
   useEffect(() => {
     let selectedState = states.find((state: any) => stateId <= state.id);
-
+    console.log(selectedState);
+    
     setState(selectedState && selectedState.name);
-
+    
     setDistricts(country_state_district.getDistrictsByStateId(stateId));
   }, [stateId, setDistricts]);
 
@@ -52,7 +53,7 @@ const CheckoutDetails = () => {
     state=>state.userReducer
   )
 
-  const shippingInfoHandler = () => {
+  const shippingInfoHandler = () => { 
     
     let shippingInfo = {
       firstName,
@@ -63,7 +64,7 @@ const CheckoutDetails = () => {
       pincode,
       address,
     };
-    console.log(shippingInfo);
+    console.log(shippingInfo); 
 
     dispatch(setShippingInfo(shippingInfo));
     displayRazorpay(cartTotalAmount,shippingInfo,userDetails,cartItems)
@@ -99,8 +100,6 @@ const CheckoutDetails = () => {
     }
   
     let reqData = {
-      orderItems: cartItems,
-      shippingInfo,
       totalPrice: totalAmount,
     };
     let token = JSON.parse(
@@ -117,7 +116,7 @@ const CheckoutDetails = () => {
     const { data } = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/order/createOrder`,
       reqData,
-      config
+      config 
     );
     // creating a new order
     // const {data} = await sendRequest(
@@ -134,7 +133,7 @@ const CheckoutDetails = () => {
   
     // Getting the order details back
     const { amount, id: order_id, currency } = data.orderDetail;
-    const { dbOrderId } = data;
+
   
     const options = {
       key: "rzp_test_vfKqDSJFUHzSxG", // Enter the Key ID generated from the Dashboard
@@ -151,9 +150,12 @@ const CheckoutDetails = () => {
           razorpayOrderId: response.razorpay_order_id,
           razorpaySignature: response.razorpay_signature,
         };
+     
         const data = {
+          orderItems: cartItems,
+          shippingInfo,
+          totalPrice: totalAmount,
           paymentInfo,
-          dbOrderId: dbOrderId,
         };
         console.log(data);
   
@@ -424,18 +426,7 @@ const CheckoutDetails = () => {
                   </div>
                 </div>
               </div>
-              <h6 className="mb-3 py-3 border-bottom">Billing address</h6>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  checked
-                  id="same-address"
-                />
-                <label className="form-check-label" htmlFor="same-address">
-                  Same as shipping address
-                </label>
-              </div>
+          
               {/* <!-- Navigation (desktop)--> */}
               <div className="d-none d-lg-flex pt-4 mt-3">
                 <div className="w-50 pe-3">

@@ -99,7 +99,7 @@ const Home: NextPage = () => {
           >
             <Spinner />
           </main>
-        ) : (
+        ) : ( 
           <React.Fragment>
             <main className="page-wrapper">
               {/* <!-- Hero section--> */}
