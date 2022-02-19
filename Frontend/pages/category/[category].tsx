@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useAlert } from "react-alert";
 import { useAppSelector, useAppDispatch } from "../../src/hooks/redux-hooks";
 import { addItemsToCart } from "../../src/store/Reducers/cart";
+import Link from "next/link";
 const Category = () => {
   const router = useRouter();
   const alert = useAlert();
@@ -137,12 +138,14 @@ const Category = () => {
                         >
                           <i className="ci-heart"></i>
                         </button>
+                        <Link href={`/productDetail/${product._id}`}>
                         <a
                           className="card-img-top d-block overflow-hidden"
                           href="shop-single-v1.html"
-                        >
+                          >
                           <img src={product.images[0].url} alt="Product" />
                         </a>
+                          </Link>
                         <div className="card-body py-2">
                           <a
                             className="product-meta d-block fs-xs pb-1"
@@ -236,6 +239,7 @@ const Category = () => {
                             <i className="ci-cart fs-sm me-1"></i>Add to Cart
                           </button>
                           <div className="text-center">
+                          <Link href={`/productDetail/${product._id}`}>
                             <a
                               className="nav-link-style fs-ms"
                               href="#quick-view"
@@ -244,6 +248,7 @@ const Category = () => {
                               <i className="ci-eye align-middle me-1"></i>Quick
                               view
                             </a>
+                            </Link>
                           </div>
                         </div>
                       </div>

@@ -6,6 +6,7 @@ import { useAlert } from "react-alert";
 import { Spinner } from "react-bootstrap";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import getFormattedDate from "../src/utils/formattedDate";
 
 const AdminOrders = () => {
   const dispatch = useAppDispatch();
@@ -116,6 +117,8 @@ const AdminOrders = () => {
                           pillClass = "alert-danger";
                         }
 
+                        let date = getFormattedDate(order.createdAt)
+
                         return (
                           <tr>
                             <td>{order._id}</td>
@@ -135,7 +138,7 @@ const AdminOrders = () => {
                                 {order.orderStatus}
                               </span>
                             </td>
-                            <td>{order.createdAt}</td>
+                            <td>{date}</td>
                             <td className="text-end">
                               <Link href={`/orderDetail/${order._id}`}>
                                 <a href="#" className="btn btn-light">

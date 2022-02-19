@@ -3,12 +3,14 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { useAlert } from "react-alert";
 import { sendRequest, sendRequestWithJson } from "../../src/hooks/request";
+import getFormattedDate from "../../src/utils/formattedDate";
 
 const OrderDetail = () => {
   const router = useRouter();
   const alert = useAlert();
   const [loading, setLoading] = useState(false);
   const [order, setOrder] = useState<any>({});
+  const [date, setDate] = useState<any>();
   let orderId: string | string[] | undefined;
   useEffect(() => {
     orderId = router.query.orderId;
@@ -24,6 +26,8 @@ const OrderDetail = () => {
       );
       console.log(data);
       setOrder(data.order);
+      let date = getFormattedDate(data.order.createdAt);
+      setDate(date);
     } catch (err) {
       console.log(err);
 
@@ -65,7 +69,7 @@ const OrderDetail = () => {
                 <div className="col-lg-6 col-md-6">
                   <span>
                     <i className="material-icons md-calendar_today"></i>{" "}
-                    <b>{order.createdAt}</b>
+                    <b>{date}</b>
                   </span>{" "}
                   <br />
                   <small className="text-muted">Order ID: {order._id}</small>

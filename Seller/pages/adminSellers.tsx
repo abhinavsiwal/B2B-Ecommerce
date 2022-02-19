@@ -4,6 +4,7 @@ import { sendRequest } from "../src/hooks/request";
 
 import { useAlert } from "react-alert";
 import Link from "next/link";
+import getFormattedDate from "../src/utils/formattedDate";
 
 const AdminSellers = () => {
   const alert = useAlert();
@@ -72,6 +73,7 @@ const AdminSellers = () => {
               <tbody>
                 {sellers &&
                   sellers.map((seller: any) => {
+                    let date = getFormattedDate(seller.createdAt)
                     return (
                       <tr>
                         <td width="40%">
@@ -86,7 +88,7 @@ const AdminSellers = () => {
                         </td>
                         <td>{seller.phone}</td>
 
-                        <td>{seller.createdAt}</td>
+                        <td>{date}</td>
                         <td className="text-end">
                           <Link href={`/sellerDetails/${seller._id}`}>
                             <a href="#" className="btn btn-light">

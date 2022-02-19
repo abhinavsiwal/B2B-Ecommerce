@@ -3,6 +3,7 @@ import { sendRequest } from "../../src/hooks/request";
 import { useRouter } from "next/router";
 import { useAlert } from "react-alert";
 import Link from "next/link";
+import getFormattedDate from "../../src/utils/formattedDate";
 const UserDetails = () => {
   const router = useRouter();
   const alert = useAlert();
@@ -143,6 +144,8 @@ const UserDetails = () => {
                           pillClass = "alert-danger";
                         }
 3
+                        let date = getFormattedDate(order.createdAt)
+
                         return (
                           <tr key={order._id}>
                             <td>{order._id}</td>
@@ -162,7 +165,7 @@ const UserDetails = () => {
                                 {order.orderStatus}
                               </span>
                             </td>
-                            <td>{order.createdAt}</td>
+                            <td>{date}</td>
                             <td className="text-end">
                               <Link href={`/orderDetail/${order._id}`}>
                                 <a href="#" className="btn btn-light">

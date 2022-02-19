@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "../src/hooks/redux-hooks";
 import { setProducts } from "../src/store/Reducers/products";
 import { useAlert } from "react-alert";
 import { sendRequest } from "../src/hooks/request";
+import getFormattedDate from "../src/utils/formattedDate";
 
 const Products = () => {
   const alert = useAlert();
@@ -21,7 +22,9 @@ const Products = () => {
   const getProducts = async () => {
     try {
       setLoading(true);
-      const { data } = await sendRequest(`${process.env.NEXT_PUBLIC_API_URL}/products/seller`);
+      const { data } = await sendRequest(
+        `${process.env.NEXT_PUBLIC_API_URL}/products/seller`
+      );
       console.log(data);
       console.log(data.products);
 
@@ -125,103 +128,94 @@ const Products = () => {
             <div className="card-body">
               {products &&
                 products.map((product: any) => {
-                  function getFormattedDate(date:any) {
-                    var year = date.getFullYear();
-                  
-                    var month = (1 + date.getMonth()).toString();
-                    month = month.length > 1 ? month : '0' + month;
-                  
-                    var day = date.getDate().toString();
-                    day = day.length > 1 ? day : '0' + day;
-                    
-                    return month + '/' + day + '/' + year;
-                  }
-                  let date = new Date(product.createdAt);
-                  console.log(date);
-                  
-                  let newDate = getFormattedDate(date)
-                  console.log(newDate);
-                  
-                  return(
+                  let date = getFormattedDate(product.createdAt);
+
+                  return (
                     <article className="itemlist" key={product._id}>
-                    <div className="row align-items-center" key={product._id}>
-                      <div className="col col-check flex-grow-0">
-                        <div className="form-check">
-                          <input className="form-check-input" type="checkbox" />
-                        </div>
-                      </div>
-                      <div className="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
-                        <a className="itemside" href="#">
-                          <div className="left">
-                            <img
-                              src={
-                                product.images && product.images[0]
-                                  ? product.images[0].url
-                                  : ""
-                              }
-                              className="img-sm img-thumbnail"
-                              alt="Item"
+                      <div className="row align-items-center" key={product._id}>
+                        <div className="col col-check flex-grow-0">
+                          <div className="form-check">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
                             />
                           </div>
-                          <div className="info">
-                            <h6 className="mb-0">{product.name}</h6>
-                          </div>
-                        </a>
-                      </div>
-                      <div className="col-lg-2 col-sm-2 col-4 col-price">
-                        {" "}
-                        <span>₹{product.price}</span>{" "}
-                      </div>
-                      <div className="col-lg-2 col-sm-2 col-4 col-status">
-                        <span className="badge rounded-pill alert-success">
-                          {product.stock === 0 ? "Out of Stock" : "In Stock"}
-                        </span>
-                      </div>
-                      <div className="col-lg-2 col-sm-2 col-4 col-date">
-                        <span>{product.createdAt}</span>
-                      </div>
-                      <div className="col-lg-1 col-sm-2 col-4 col-action">
-                        <div className="dropdown float-end">
-                          <Dropdown>
-                            <Dropdown.Toggle
-                              className="btn btn-light"
-                              id="dropdown-basic"
-                            >
-                              <i className="material-icons md-more_horiz"></i>
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu className="dropdown-menu">
-                              <Dropdown.Item href="#" className="dropdown-item">
-                                View Detail
-                              </Dropdown.Item>
-                              <Dropdown.Item
-                                className="dropdown-item"
-                                href="#"
-                                onClick={() =>
-                                  updateProductHandler(product._id)
-                                }
-                              >
-                                Edit info
-                              </Dropdown.Item>
-                              <Dropdown.Item
-                                href="#"
-                                className="dropdown-item"
-                                style={{ color: "red" }}
-                                onClick={() =>
-                                  deleteProductHandler(product._id)
-                                }
-                              >
-                                Delete
-                              </Dropdown.Item>
-                            </Dropdown.Menu>
-                          </Dropdown>
                         </div>
+                        <div className="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
+                          <a className="itemside" href="#">
+                            <div className="left">
+                              <img
+                                src={
+                                  product.images && product.images[0]
+                                    ? product.images[0].url
+                                    : ""
+                                }
+                                className="img-sm img-thumbnail"
+                                alt="Item"
+                              />
+                            </div>
+                            <div className="info">
+                              <h6 className="mb-0">{product.name}</h6>
+                            </div>
+                          </a>
+                        </div>
+                        <div className="col-lg-2 col-sm-2 col-4 col-price">
+                          {" "}
+                          <span>₹{product.price}</span>{" "}
+                        </div>
+                        <div className="col-lg-2 col-sm-2 col-4 col-status">
+                          <span className="badge rounded-pill alert-success">
+                            {product.stock === 0 ? "Out of Stock" : "In Stock"}
+                          </span>
+                        </div>
+                        <div className="col-lg-2 col-sm-2 col-4 col-date">
+                          <span>{date}</span>
+                        </div>
+                        <div className="col-lg-1 col-sm-2 col-4 col-action">
+                          <div className="dropdown float-end">
+                            <Dropdown>
+                              <Dropdown.Toggle
+                                className="btn btn-light"
+                                id="dropdown-basic"
+                              >
+                                <i className="material-icons md-more_horiz"></i>
+                              </Dropdown.Toggle>
+                              <Dropdown.Menu className="dropdown-menu">
+                                <Dropdown.Item
+                                  href="#"
+                                  className="dropdown-item"
+                                >
+                                  View Detail
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  className="dropdown-item"
+                                  href="#"
+                                  onClick={() =>
+                                    updateProductHandler(product._id)
+                                  }
+                                >
+                                  Edit info
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  href="#"
+                                  className="dropdown-item"
+                                  style={{ color: "red" }}
+                                  onClick={() =>
+                                    deleteProductHandler(product._id)
+                                  }
+                                >
+                                  Delete
+                                </Dropdown.Item>
+                              </Dropdown.Menu>
+                            </Dropdown>
+                          </div>
 
-                        {/* <!-- dropdown // --> */}
+                          {/* <!-- dropdown // --> */}
+                        </div>
                       </div>
-                    </div>
-                    {/* <!-- row .// --> */}
-                  </article>
-                  )
+                      {/* <!-- row .// --> */}
+                    </article>
+                  );
                 })}
 
               {/* <!-- itemlist  .// --> */}
