@@ -3,6 +3,7 @@ const uniqId = require("uniqid");
 const crypto = require("crypto");
 const Order = require("../models/Order");
 const User = require("../models/User");
+const Product = require("../models/Product");
 
 let instance = new Razorpay({
   key_id: process.env.RAZORPAY_KEY,
@@ -76,6 +77,21 @@ exports.paymentCallback = async (req, res, next) => {
     } catch (err) {
       console.log(err);
     }
+
+    orderItems.forEach( async(item) => {
+      // console.log(item);
+      let product;
+      try {
+        console.log(item.id);
+        product = await Product.findById(item.id);
+        console.log(product);
+        product.stock -= item.quantity;
+        product.save();
+      } catch (err) {
+        console.log(err, "$$$$$$$$$$$$44");
+      }
+    
+    });
 
     res.json({
       message: "Order Placed Successfully",
@@ -239,16 +255,18 @@ exports.sellerOrderDetails = async (req, res, next) => {
 
   order.user = user;
 
-  let sellerOrderItems={};
-  let totalAmount=0;
-  sellerOrderItems = order.orderItems.filter(item=>item.seller.toString()===sellerId.toString());
-  sellerOrderItems.forEach(item=>{
-    totalAmount+=item.quantity*item.price;
-  })
+  let sellerOrderItems = {};
+  let totalAmount = 0;
+  sellerOrderItems = order.orderItems.filter(
+    (item) => item.seller.toString() === sellerId.toString()
+  );
+  sellerOrderItems.forEach((item) => {
+    totalAmount += item.quantity * item.price;
+  });
   // console.log(sellerOrder);
   order.orderItems = sellerOrderItems;
-  order.totalPrice=totalAmount;
-// console.log(order);
+  order.totalPrice = totalAmount;
+  // console.log(order);
 
   res.status(200).json({
     success: true,
