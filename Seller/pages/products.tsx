@@ -124,8 +124,26 @@ const Products = () => {
           ) : (
             <div className="card-body">
               {products &&
-                products.map((product: any) => (
-                  <article className="itemlist" key={product._id}>
+                products.map((product: any) => {
+                  function getFormattedDate(date:any) {
+                    var year = date.getFullYear();
+                  
+                    var month = (1 + date.getMonth()).toString();
+                    month = month.length > 1 ? month : '0' + month;
+                  
+                    var day = date.getDate().toString();
+                    day = day.length > 1 ? day : '0' + day;
+                    
+                    return month + '/' + day + '/' + year;
+                  }
+                  let date = new Date(product.createdAt);
+                  console.log(date);
+                  
+                  let newDate = getFormattedDate(date)
+                  console.log(newDate);
+                  
+                  return(
+                    <article className="itemlist" key={product._id}>
                     <div className="row align-items-center" key={product._id}>
                       <div className="col col-check flex-grow-0">
                         <div className="form-check">
@@ -203,7 +221,8 @@ const Products = () => {
                     </div>
                     {/* <!-- row .// --> */}
                   </article>
-                ))}
+                  )
+                })}
 
               {/* <!-- itemlist  .// --> */}
 

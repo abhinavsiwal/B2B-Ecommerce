@@ -6,6 +6,7 @@ import axios from "axios";
 import country_state_district from "country_state_district";
 import Link from "next/link";
 import { setShippingInfo } from "../src/store/Reducers/cart";
+import { clearCart } from "../src/store/Reducers/cart";
 
 const CheckoutDetails = () => {
   const dispatch = useAppDispatch();
@@ -99,6 +100,10 @@ const CheckoutDetails = () => {
       return;
     }
   
+    if(!district && !state){
+      return alert.error("Please select district and state first")
+    }
+
     let reqData = {
       totalPrice: totalAmount,
     };
@@ -173,6 +178,7 @@ const CheckoutDetails = () => {
   
         router.push('/checkoutComplete') 
         alert.success(result.data.message);
+        dispatch(clearCart());
       },
       prefill: {
         name: shippingInfo.name,
