@@ -210,7 +210,7 @@ const Home: NextPage = () => {
                             className="d-block w-100"
                             src={category.image}
                             alt={category.name}
-                            style={{maxHeight:"400px"}}
+                            style={{maxHeight:"300px"}}
                           />
                         </a>
                         <div className="card-body">
