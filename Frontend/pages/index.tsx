@@ -21,15 +21,39 @@ const Home: NextPage = () => {
     getAllProducts();
   }, []);
 
-  const categories = [
-    "Shirt",
-    "T Shirt",
-    "Joggers",
-    "Vests",
-    "Knitwear",
-    "Shorts",
-    "Winterwear",
-    "Sportswear",
+  let categories = [
+    {
+      name: "Shirt",
+      image: "/img/shop/categories/Shirt.jpg",
+    },
+    {
+      name: "TShirt",
+      image: "/img/shop/categories/Tshirt.jpg",
+    },
+    {
+      name: "Joggers",
+      image: "/img/shop/categories/Joggers.jpg",
+    },
+    {
+      name: "Vests",
+      image: "/img/shop/categories/vests.jpg",
+    },
+    {
+      name: "Knitwear",
+      image: "/img/shop/categories/knitwear.jpg",
+    },
+    {
+      name: "Shorts",
+      image: "/img/shop/categories/Shorts.jpg",
+    },
+    {
+      name: "Winterwear",
+      image: "/img/shop/categories/Winterwear.jpg",
+    },
+    {
+      name: "Sportswear",
+      image: "/img/shop/categories/Sportswear.jpg",
+    },
   ];
 
   const getAllProducts = async () => {
@@ -153,14 +177,13 @@ const Home: NextPage = () => {
                             All categories
                           </button>
                           <div className="dropdown-menu dropdown-menu-end my-1">
-                            {categories.map(category=>(
-                              <Link href={`/category/${category}`}>
-                              <a className="dropdown-item" href="#">
-                              {category}
-                            </a>
+                            {categories.map((category) => (
+                              <Link href={`/category/${category.name} key={category.name}`}>
+                                <a className="dropdown-item" href="#">
+                                  {category.name}
+                                </a>
                               </Link>
-                              ))}
-                         
+                            ))}
                           </div>
                         </div>
                       </div>
@@ -168,165 +191,39 @@ const Home: NextPage = () => {
                   </div>
                 </div>
               </section>
-              {/* <!-- Trending products (Carousel)--> */}
-              <section className="container pt-md-3 pb-5 mb-md-3">
-                <h2 className="h3 text-center">Trending products</h2>
-                <div className="row pt-4 mx-n2">
-                  {/* <!-- Product--> */}
-                  {products &&
-                    products.map((product: any) => {
-                      return (
-                        <div
-                          className="col-lg-3 col-md-4 col-sm-6 px-2 mb-4"
-                          key={product._id}
-                        >
-                          <div className="card product-card" key={product._id}>
-                            <button
-                              className="btn-wishlist btn-sm"
-                              type="button"
-                              data-bs-toggle="tooltip"
-                              data-bs-placement="left"
-                              title="Add to wishlist"
-                            >
-                              <i className="ci-heart"></i>
-                            </button>
-                            <Link href={`/productDetail/${product._id}`}>
-                              <a
-                                className="card-img-top d-block overflow-hidden"
-                                href="shop-single-v1.html"
-                              >
-                                <img
-                                  src={
-                                    product.images && product.images[0]
-                                      ? product.images[0].url
-                                      : ""
-                                  }
-                                  alt={product.name}
-                                />
-                              </a>
-                            </Link>
-                            <div className="card-body py-2">
-                              <a
-                                className="product-meta d-block fs-xs pb-1"
-                                href="#"
-                              >
-                                {product.idealFor + product.category}
-                              </a>
-                              <h3 className="product-title fs-sm">
-                                <a href="shop-single-v1.html">{product.name}</a>
-                              </h3>
-                              <div className="d-flex justify-content-between">
-                                <div className="product-price">
-                                  <span className="text-accent">
-                                    ₹{product.price}
-                                  </span>
-                                </div>
-                                <div className="star-rating">
-                                  <i className="star-rating-icon ci-star-filled active"></i>
-                                  <i className="star-rating-icon ci-star-filled active"></i>
-                                  <i className="star-rating-icon ci-star-filled active"></i>
-                                  <i className="star-rating-icon ci-star-filled active"></i>
-                                  <i className="star-rating-icon ci-star"></i>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="card-body card-body-hidden">
-                              <div className="text-center pb-2">
-                                <div className="form-check form-option form-check-inline mb-2">
-                                  <input
-                                    className="form-check-input"
-                                    type="radio"
-                                    name="size5"
-                                    id="s4-80"
-                                  />
-                                  <label
-                                    className="form-option-label"
-                                    htmlFor="s4-80"
-                                  >
-                                    8
-                                  </label>
-                                </div>
-                                <div className="form-check form-option form-check-inline mb-2">
-                                  <input
-                                    className="form-check-input"
-                                    type="radio"
-                                    name="size5"
-                                    id="s4-85"
-                                    checked
-                                  />
-                                  <label
-                                    className="form-option-label"
-                                    htmlFor="s4-85"
-                                  >
-                                    8.5
-                                  </label>
-                                </div>
-                                <div className="form-check form-option form-check-inline mb-2">
-                                  <input
-                                    className="form-check-input"
-                                    type="radio"
-                                    name="size5"
-                                    id="s4-90"
-                                  />
-                                  <label
-                                    className="form-option-label"
-                                    htmlFor="s4-90"
-                                  >
-                                    9
-                                  </label>
-                                </div>
-                                <div className="form-check form-option form-check-inline mb-2">
-                                  <input
-                                    className="form-check-input"
-                                    type="radio"
-                                    name="size5"
-                                    id="s4-95"
-                                  />
-                                  <label
-                                    className="form-option-label"
-                                    htmlFor="s4-95"
-                                  >
-                                    9.5
-                                  </label>
-                                </div>
-                              </div>
+              {/* <!-- Categories products (Carousel)--> */}
+              <div className="container pb-4 pb-sm-5">
+              <h2 className="h3 text-center py-4 mt-md-3">Categories</h2>
 
-                              <button
-                                className="btn btn-primary btn-sm d-block w-100 mb-2"
-                                type="button"
-                                onClick={() => addToCart(product)}
-                              >
-                                <i className="ci-cart fs-sm me-1"></i>Add to
-                                Cart
-                              </button>
-                              <div className="text-center">
-                                <Link href={`/productDetail/${product._id}`}>
-                                  <a
-                                    className="nav-link-style fs-ms"
-                                    href="#quick-view"
-                                    data-bs-toggle="modal"
-                                  >
-                                    <i className="ci-eye align-middle me-1"></i>
-                                    Quick view
-                                  </a>
-                                </Link>
-                              </div>
-                            </div>
-                          </div>
-                          <hr className="d-sm-none" />
+                {/* <!-- Categories grid--> */}
+                <div className="row pt-5">
+                  {/* <!-- Catogory--> */}
+                  {categories.map((category:any)=>{
+                    return(
+                      <div className="col-md-4 col-sm-6 mb-3" key={category.name} >
+                      <div className="card border-0">
+                        <a
+                          className="d-block overflow-hidden rounded-3"
+                          href="#"
+                        >
+                          <img
+                            className="d-block w-100"
+                            src={category.image}
+                            alt={category.name}
+                            style={{maxHeight:"400px"}}
+                          />
+                        </a>
+                        <div className="card-body">
+                          <h2 className="h5">{category.name}</h2>
                         </div>
-                      );
-                    })}
+                      </div>
+                    </div>
+                    );
+                  })}
+                 
                 </div>
-                <div className="text-center pt-3">
-                  <a
-                    className="btn btn-outline-accent"
-                    href="shop-grid-ls.html"
-                  >
-                    More products<i className="ci-arrow-right ms-1"></i>
-                  </a>
-                </div>
-              </section>
+             
+              </div>
               {/* <!-- Marketplace features--> */}
               <section
                 className="bg-accent bg-size-cover bg-position-center pt-5 pb-4 pb-lg-5"
@@ -411,7 +308,168 @@ const Home: NextPage = () => {
                   </div>
                 </div>
               </section>
-
+              <div className="container pb-4 pb-sm-5">
+                   {/* <!-- Popular brands--> */}
+                   <h2 className="h3 text-center py-4 mt-md-3">Popular brands</h2>
+                <div className="row">
+                  <div className="col-md-3 col-sm-4 col-6">
+                    <a
+                      className="d-block bg-white shadow-sm rounded-3 py-3 py-sm-4 mb-grid-gutter"
+                      href="#"
+                    >
+                      <img
+                        className="d-block mx-auto"
+                        src="/img/shop/brands/01.png"
+                        width="150"
+                        alt="Brand"
+                      />
+                    </a>
+                  </div>
+                  <div className="col-md-3 col-sm-4 col-6">
+                    <a
+                      className="d-block bg-white shadow-sm rounded-3 py-3 py-sm-4 mb-grid-gutter"
+                      href="#"
+                    >
+                      <img
+                        className="d-block mx-auto"
+                        src="/img/shop/brands/02.png"
+                        width="150"
+                        alt="Brand"
+                      />
+                    </a>
+                  </div>
+                  <div className="col-md-3 col-sm-4 col-6">
+                    <a
+                      className="d-block bg-white shadow-sm rounded-3 py-3 py-sm-4 mb-grid-gutter"
+                      href="#"
+                    >
+                      <img
+                        className="d-block mx-auto"
+                        src="/img/shop/brands/03.png"
+                        width="150"
+                        alt="Brand"
+                      />
+                    </a>
+                  </div>
+                  <div className="col-md-3 col-sm-4 col-6">
+                    <a
+                      className="d-block bg-white shadow-sm rounded-3 py-3 py-sm-4 mb-grid-gutter"
+                      href="#"
+                    >
+                      <img
+                        className="d-block mx-auto"
+                        src="/img/shop/brands/04.png"
+                        width="150"
+                        alt="Brand"
+                      />
+                    </a>
+                  </div>
+                  <div className="col-md-3 col-sm-4 col-6">
+                    <a
+                      className="d-block bg-white shadow-sm rounded-3 py-3 py-sm-4 mb-grid-gutter"
+                      href="#"
+                    >
+                      <img
+                        className="d-block mx-auto"
+                        src="/img/shop/brands/05.png"
+                        width="150"
+                        alt="Brand"
+                      />
+                    </a>
+                  </div>
+                  <div className="col-md-3 col-sm-4 col-6">
+                    <a
+                      className="d-block bg-white shadow-sm rounded-3 py-3 py-sm-4 mb-grid-gutter"
+                      href="#"
+                    >
+                      <img
+                        className="d-block mx-auto"
+                        src="/img/shop/brands/06.png"
+                        width="150"
+                        alt="Brand"
+                      />
+                    </a>
+                  </div>
+                  <div className="col-md-3 col-sm-4 col-6">
+                    <a
+                      className="d-block bg-white shadow-sm rounded-3 py-3 py-sm-4 mb-grid-gutter"
+                      href="#"
+                    >
+                      <img
+                        className="d-block mx-auto"
+                        src="/img/shop/brands/07.png"
+                        width="150"
+                        alt="Brand"
+                      />
+                    </a>
+                  </div>
+                  <div className="col-md-3 col-sm-4 col-6">
+                    <a
+                      className="d-block bg-white shadow-sm rounded-3 py-3 py-sm-4 mb-grid-gutter"
+                      href="#"
+                    >
+                      <img
+                        className="d-block mx-auto"
+                        src="/img/shop/brands/08.png"
+                        width="150"
+                        alt="Brand"
+                      />
+                    </a>
+                  </div>
+                  <div className="col-md-3 col-sm-4 col-6">
+                    <a
+                      className="d-block bg-white shadow-sm rounded-3 py-3 py-sm-4 mb-grid-gutter"
+                      href="#"
+                    >
+                      <img
+                        className="d-block mx-auto"
+                        src="/img/shop/brands/09.png"
+                        width="150"
+                        alt="Brand"
+                      />
+                    </a>
+                  </div>
+                  <div className="col-md-3 col-sm-4 col-6">
+                    <a
+                      className="d-block bg-white shadow-sm rounded-3 py-3 py-sm-4 mb-grid-gutter"
+                      href="#"
+                    >
+                      <img
+                        className="d-block mx-auto"
+                        src="/img/shop/brands/10.png"
+                        width="150"
+                        alt="Brand"
+                      />
+                    </a>
+                  </div>
+                  <div className="col-md-3 col-sm-4 col-6">
+                    <a
+                      className="d-block bg-white shadow-sm rounded-3 py-3 py-sm-4 mb-grid-gutter"
+                      href="#"
+                    >
+                      <img
+                        className="d-block mx-auto"
+                        src="/img/shop/brands/11.png"
+                        width="150"
+                        alt="Brand"
+                      />
+                    </a>
+                  </div>
+                  <div className="col-md-3 col-sm-4 col-6">
+                    <a
+                      className="d-block bg-white shadow-sm rounded-3 py-3 py-sm-4 mb-grid-gutter"
+                      href="#"
+                    >
+                      <img
+                        className="d-block mx-auto"
+                        src="/img/shop/brands/12.png"
+                        width="150"
+                        alt="Brand"
+                      />
+                    </a>
+                  </div>
+                </div>
+              </div>
               {/* <!-- Recent products grid--> */}
               <section className="container pb-5 mb-lg-3">
                 {/* <!-- Heading--> */}

@@ -4,6 +4,7 @@ import { sendRequestWithJson } from "../src/hooks/request";
 import { useAppDispatch, useAppSelector } from "../src/hooks/redux-hooks";
 import { setUserDetails,setToken,setIsLoggedIn } from "../src/store/Reducers/user";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const User = () => {
   const alert = useAlert();
@@ -109,6 +110,7 @@ const User = () => {
                 </div>
                 <ul className="list-unstyled mb-0">
                   <li className="border-bottom mb-0">
+                    <Link href="/orders">
                     <a
                       className="nav-link-style d-flex align-items-center px-4 py-3"
                       href="account-orders.html"
@@ -118,6 +120,7 @@ const User = () => {
                         {orders.length}
                       </span>
                     </a>
+                      </Link>
                   </li>
                   <li className="border-bottom mb-0">
                     <a

@@ -2,7 +2,9 @@ const User = require("../models/User");
 const Order = require("../models/Order");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { v4: uuidv4 } = require("uuid")
 const { generateOtp, fast2sms } = require("../utils/otp");
+
 
 // @route POST /signup
 // @desc Register a user
@@ -24,6 +26,9 @@ exports.signup = async (req, res, next) => {
       .json({ message: "User already exists. Please try to login" });
   }
 
+
+
+
   // Generate Otp
   const otp = generateOtp(6);
   console.log(otp);
@@ -39,13 +44,28 @@ exports.signup = async (req, res, next) => {
       .status(500)
       .json({ message: "Otp sending failed,Please try again." });
   }
+
+
+  let referrer;
+  try {
+    referrer = await User.find({
+      userReferralCode:referralCode,
+    })
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({message:"Refferal code not correct"});
+  }
+console.log(referrer);
+  console.log(referrer[0]._id);
+
   const createUser = new User({
     phone,
     name,
     storeName,
     pincode,
-    referralCode,
+    userReferralCode:uuidv4().slice(0,6),
     phoneOtp: otp,
+    referrer:referrer[0]._id,
   });
   try {
     await createUser.save();
@@ -55,6 +75,13 @@ exports.signup = async (req, res, next) => {
       .status(500)
       .json({ message: "Signing up falied, Please try again later" });
   }
+
+  try {
+    
+  } catch (err) {
+    
+  }
+
   res.status(201).json({
     success: true,
     message: "OTP sent successfully.",
@@ -140,6 +167,21 @@ exports.verifyOtp = async (req, res, next) => {
     console.log(err);
     return res.status(500).json({ message: "JWT error." });
   }
+
+  let referrer; 
+  try {
+    referrer = await User.findById(user.referrer);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      message:"Referrer not found"
+    })
+  }
+
+user.referrerName = referrer.name,
+console.log(referrer);
+console.log(referrer.name);
+console.log(user);
   res
     .status(201)
     .json({ token, message: "User Logged In Successfully", userDetails: user });

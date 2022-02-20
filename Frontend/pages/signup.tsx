@@ -193,7 +193,7 @@ const Signup = () => {
                     type="number"
                     required
                     id="reg-phone"
-                    value={phone}
+    
                     onChange={(e) => setPhone(e.target.value)}
                     onBlur={phoneBlurHandler}
                   />

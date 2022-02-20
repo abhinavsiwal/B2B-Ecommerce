@@ -18,11 +18,14 @@ const userSchema = new mongoose.Schema({
     type: Number,
     required:true,
   },
-  referralCode: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref:"Referral"
+  userReferralCode: {
+    type: String,
   },
 
+  referrer:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"User",
+  },
   phoneOtp: String,
 
   createdAt: {
