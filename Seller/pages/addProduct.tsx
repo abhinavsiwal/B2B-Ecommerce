@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Router } from "next/router";
 import { useAppDispatch, useAppSelector } from "../src/hooks/redux-hooks";
 import { useAlert } from "react-alert";
-import {sendRequest} from '../src/hooks/request'
+import { sendRequest } from "../src/hooks/request";
 import axios from "axios";
 const AddProduct = () => {
   const alert = useAlert();
@@ -16,13 +16,14 @@ const AddProduct = () => {
   const [price, setPrice] = useState<any>();
   const [stock, setStock] = useState<any>();
   const [category, setCategory] = useState<string>("Shirt");
+  const [setOfProducts, setSetOfProducts] = useState<any>();
   const [idealFor, setIdealFor] = useState<string>("Both");
   const [images, setImages] = useState<any>([]);
   const [imagesPreview, setImagesPreview] = useState<any>([]);
 
   const [loading, setLoading] = useState<boolean>(false);
 
-    const {sellerToken} = useAppSelector(state=>state.sellerReducer);
+  const { sellerToken } = useAppSelector((state) => state.sellerReducer);
 
   const categories = [
     "Shirt",
@@ -67,21 +68,22 @@ const AddProduct = () => {
     formData.set("size", size);
     formData.set("design", design);
     formData.set("brand", brand);
-
-      images.forEach((image:any) => {
-          formData.append("images",image)
-      });
-
-
-
+    formData.set("setOfProducts", setOfProducts);
+    images.forEach((image: any) => {
+      formData.append("images", image);
+    });
 
     // console.log(productData);
     try {
       setLoading(true);
-      const { data } = await sendRequest(`${process.env.NEXT_PUBLIC_API_URL}/products/product/new`,formData,"POST")
+      const { data } = await sendRequest(
+        `${process.env.NEXT_PUBLIC_API_URL}/products/product/new`,
+        formData,
+        "POST"
+      );
 
       console.log(data);
-      
+
       alert.success(data.message);
       setBrand("");
       setCategory("");
@@ -95,14 +97,14 @@ const AddProduct = () => {
       setSize("");
       setStock("");
       setImages([]);
-      setImagesPreview([])
+      setImagesPreview([]);
       setLoading(false);
     } catch (err: any) {
       console.log(err);
       if (err.response.data.message) {
-          alert.error(err.response.data.message);
-      }else{
-          alert.error("Something went wrong. Please try again")
+        alert.error(err.response.data.message);
+      } else {
+        alert.error("Something went wrong. Please try again");
       }
       setLoading(false);
     }
@@ -113,7 +115,7 @@ const AddProduct = () => {
       <div className="content-header">
         <h2 className="content-title">Add product</h2>
         <div>
-          <button className="btn btn-primary" onClick={publishHandler} >
+          <button className="btn btn-primary" onClick={publishHandler}>
             {loading ? (
               <React.Fragment>
                 <span
@@ -124,10 +126,7 @@ const AddProduct = () => {
                 <span className="visually-hidden">Loading...</span>
               </React.Fragment>
             ) : (
-              <React.Fragment>
-             
-                Publish
-              </React.Fragment>
+              <React.Fragment>Publish</React.Fragment>
             )}
           </button>
         </div>
@@ -282,6 +281,16 @@ const AddProduct = () => {
                   className="form-control"
                   value={stock}
                   onChange={(e) => setStock(Number(e.target.value))}
+                />
+              </div>
+              <div className="mb-4">
+                <label className="form-label">Set of Products</label>
+                <input
+                  type="number"
+                  placeholder="Set of Product"
+                  className="form-control"
+                  value={setOfProducts}
+                  onChange={(e) => setSetOfProducts(Number(e.target.value))}
                 />
               </div>
 

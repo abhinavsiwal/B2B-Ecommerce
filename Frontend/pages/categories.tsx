@@ -1,40 +1,8 @@
+import Link from "next/link";
 import React from "react";
-
+import categories from "../src/utils/categories";
 const Categories = () => {
-  let categories = [
-    {
-      name: "Shirt",
-      image: "/img/shop/categories/Shirt.jpg",
-    },
-    {
-      name: "TShirt",
-      image: "/img/shop/categories/Tshirt.jpg",
-    },
-    {
-      name: "Joggers",
-      image: "/img/shop/categories/Joggers.jpg",
-    },
-    {
-      name: "Vests",
-      image: "/img/shop/categories/vests.jpg",
-    },
-    {
-      name: "Knitwear",
-      image: "/img/shop/categories/knitwear.jpg",
-    },
-    {
-      name: "Shorts",
-      image: "/img/shop/categories/Shorts.jpg",
-    },
-    {
-      name: "Winterwear",
-      image: "/img/shop/categories/Winterwear.jpg",
-    },
-    {
-      name: "Sportswear",
-      image: "/img/shop/categories/Sportswear.jpg",
-    },
-  ];
+ 
 
   return (
     <React.Fragment>
@@ -75,14 +43,16 @@ const Categories = () => {
             return (
               <div className="col-md-4 col-sm-6 mb-3" key={category.name}>
                 <div className="card border-0">
+                    <Link href={`/category/${category.name}`}>
                   <a className="d-block overflow-hidden rounded-3" href="#">
                     <img
                       className="d-block w-100"
                       src={category.image}
                       alt={category.name}
                       style={{ maxHeight: "300px" }}
-                    />
+                      />
                   </a>
+                      </Link>
                   <div className="card-body">
                     <h2 className="h5">{category.name}</h2>
                   </div>

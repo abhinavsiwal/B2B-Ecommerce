@@ -10,6 +10,7 @@ import { setProducts } from "../src/store/Reducers/products";
 import { addItemsToCart } from "../src/store/Reducers/cart";
 import Spinner from "../src/components/Layout/Spinner";
 import { useAlert } from "react-alert";
+import categories from "../src/utils/categories";
 
 const Home: NextPage = () => {
   const { token } = useAppSelector((state) => state.userReducer);
@@ -21,41 +22,7 @@ const Home: NextPage = () => {
     getAllProducts();
   }, []);
 
-  let categories = [
-    {
-      name: "Shirt",
-      image: "/img/shop/categories/Shirt.jpg",
-    },
-    {
-      name: "TShirt",
-      image: "/img/shop/categories/Tshirt.jpg",
-    },
-    {
-      name: "Joggers",
-      image: "/img/shop/categories/Joggers.jpg",
-    },
-    {
-      name: "Vests",
-      image: "/img/shop/categories/vests.jpg",
-    },
-    {
-      name: "Knitwear",
-      image: "/img/shop/categories/knitwear.jpg",
-    },
-    {
-      name: "Shorts",
-      image: "/img/shop/categories/Shorts.jpg",
-    },
-    {
-      name: "Winterwear",
-      image: "/img/shop/categories/Winterwear.jpg",
-    },
-    {
-      name: "Sportswear",
-      image: "/img/shop/categories/Sportswear.jpg",
-    },
-  ];
-
+ 
   const getAllProducts = async () => {
     try {
       setLoading(true);
@@ -178,7 +145,9 @@ const Home: NextPage = () => {
                           </button>
                           <div className="dropdown-menu dropdown-menu-end my-1">
                             {categories.map((category) => (
-                              <Link href={`/category/${category.name} key={category.name}`}>
+                              <Link
+                                href={`/category/${category.name} key={category.name}`}
+                              >
                                 <a className="dropdown-item" href="#">
                                   {category.name}
                                 </a>
@@ -193,36 +162,40 @@ const Home: NextPage = () => {
               </section>
               {/* <!-- Categories products (Carousel)--> */}
               <div className="container pb-4 pb-sm-5">
-              <h2 className="h3 text-center py-4 mt-md-3">Categories</h2>
+                <h2 className="h3 text-center py-4 mt-md-3">Categories</h2>
 
                 {/* <!-- Categories grid--> */}
                 <div className="row pt-5">
                   {/* <!-- Catogory--> */}
-                  {categories.map((category:any)=>{
-                    return(
-                      <div className="col-md-4 col-sm-6 mb-3" key={category.name} >
-                      <div className="card border-0">
-                        <a
-                          className="d-block overflow-hidden rounded-3"
-                          href="#"
-                        >
-                          <img
-                            className="d-block w-100"
-                            src={category.image}
-                            alt={category.name}
-                            style={{maxHeight:"300px"}}
-                          />
-                        </a>
-                        <div className="card-body">
-                          <h2 className="h5">{category.name}</h2>
+                  {categories.map((category: any) => {
+                    return (
+                      <div
+                        className="col-md-4 col-sm-6 mb-3"
+                        key={category.name}
+                      >
+                        <div className="card border-0">
+                          <Link href={`/category/${category.name}`}>
+                            <a
+                              className="d-block overflow-hidden rounded-3"
+                              href="#"
+                            >
+                              <img
+                                className="d-block w-100"
+                                src={category.image}
+                                alt={category.name}
+                                style={{ maxHeight: "300px" }}
+                              />
+                            </a>
+                          </Link>
+
+                          <div className="card-body">
+                            <h2 className="h5">{category.name}</h2>
+                          </div>
                         </div>
                       </div>
-                    </div>
                     );
                   })}
-                 
                 </div>
-             
               </div>
               {/* <!-- Marketplace features--> */}
               <section
@@ -309,8 +282,8 @@ const Home: NextPage = () => {
                 </div>
               </section>
               <div className="container pb-4 pb-sm-5">
-                   {/* <!-- Popular brands--> */}
-                   <h2 className="h3 text-center py-4 mt-md-3">Popular brands</h2>
+                {/* <!-- Popular brands--> */}
+                <h2 className="h3 text-center py-4 mt-md-3">Popular brands</h2>
                 <div className="row">
                   <div className="col-md-3 col-sm-4 col-6">
                     <a

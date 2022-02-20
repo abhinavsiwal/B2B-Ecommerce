@@ -57,10 +57,36 @@ exports.getDesigns = async(req,res,next)=>{
         designs = await Design.find();
     } catch (err) {
         console.log(err);
-        return res.status(500).json({message:"Error in getting products"})
+        return res.status(500).json({message:"Error in getting designs"})
     }
     res.status(201).json({
         success: true,
         designs,
       });
+}
+
+
+// @route GET /design/:id
+// @desc get design detail
+// @access Public
+
+exports.getDesignDetails = async(req,res,next)=>{
+    let design;
+    try {
+        design= await Design.findById(req.params.id);
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({message:"Error in getting design"})
+    }
+
+    if(!design){
+        res.status(500).json({
+            message:"Couldn't found design with this id"
+        })
+    }
+
+    res.status(200).json({
+        success:true,
+        design,
+    })
 }
