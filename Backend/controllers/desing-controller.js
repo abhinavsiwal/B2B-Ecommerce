@@ -18,7 +18,7 @@ exports.newDesign = async(req,res,next)=>{
     for (let i = 0; i < images.length; i++) {
       try {
         const result = await cloudinary.v2.uploader.upload(images[i], {
-          folder: "products",
+          folder: "design",
           fetch_format: "auto",
         });
         imagesLinks.push({
@@ -46,3 +46,21 @@ exports.newDesign = async(req,res,next)=>{
       });
 }
 
+// @route GEt /designs
+// @search ==> /design
+// @desc Get all products
+// @access Public
+
+exports.getDesigns = async(req,res,next)=>{
+    let designs;
+    try {
+        designs = await Design.find();
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({message:"Error in getting products"})
+    }
+    res.status(201).json({
+        success: true,
+        designs,
+      });
+}
