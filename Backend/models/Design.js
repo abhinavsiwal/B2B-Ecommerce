@@ -11,6 +11,10 @@ const designSchema = new mongoose.Schema({
         required: true,
         trim: true,
     },
+    category:{
+        type: String,
+       
+    },
     images: [
         {
           public_id: {
@@ -23,4 +27,11 @@ const designSchema = new mongoose.Schema({
           },
         },
       ],
+    user:{
+        type:mongoose.Schema.Types.ObjectId,
+        required:true,
+    }
 })
+
+
+module.exports = mongoose.model("Product", productSchema);
