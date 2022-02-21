@@ -10,4 +10,4 @@ router.post("/newDesign",isAuthenticatedUser,newDesign);
 router.get("/getDesigns",isAuthenticatedSeller,isAdmin,getDesigns);
 router.get("/design/:id",isAuthenticatedSeller,isAdmin,getDesignDetails);
 
-module.exports = router;
+module.exports = router

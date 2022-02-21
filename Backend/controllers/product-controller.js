@@ -38,7 +38,6 @@ exports.newProduct = async (req, res, next) => {
     console.log(err);
     next({ status: 403, message: "Error in Storing Product" });
     return;
-    kl;
   }
   res.status(201).json({
     success: true,

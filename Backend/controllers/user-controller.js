@@ -2,9 +2,8 @@ const User = require("../models/User");
 const Order = require("../models/Order");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { v4: uuidv4 } = require("uuid")
+const { v4: uuidv4 } = require("uuid");
 const { generateOtp, fast2sms } = require("../utils/otp");
-
 
 // @route POST /signup
 // @desc Register a user
@@ -26,9 +25,6 @@ exports.signup = async (req, res, next) => {
       .json({ message: "User already exists. Please try to login" });
   }
 
-
-
-
   // Generate Otp
   const otp = generateOtp(6);
   console.log(otp);
@@ -45,17 +41,16 @@ exports.signup = async (req, res, next) => {
       .json({ message: "Otp sending failed,Please try again." });
   }
 
-
   let referrer;
   try {
     referrer = await User.find({
-      userReferralCode:referralCode,
-    })
+      userReferralCode: referralCode,
+    });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({message:"Refferal code not correct"});
+    return res.status(500).json({ message: "Refferal code not correct" });
   }
-console.log(referrer);
+  console.log(referrer);
   console.log(referrer[0]._id);
 
   const createUser = new User({
@@ -63,9 +58,9 @@ console.log(referrer);
     name,
     storeName,
     pincode,
-    userReferralCode:uuidv4().slice(0,6),
+    userReferralCode: uuidv4().slice(0, 6),
     phoneOtp: otp,
-    referrer:referrer[0]._id,
+    referrer: referrer[0]._id,
   });
   try {
     await createUser.save();
@@ -77,10 +72,7 @@ console.log(referrer);
   }
 
   try {
-    
-  } catch (err) {
-    
-  }
+  } catch (err) {}
 
   res.status(201).json({
     success: true,
@@ -168,20 +160,23 @@ exports.verifyOtp = async (req, res, next) => {
     return res.status(500).json({ message: "JWT error." });
   }
 
-  let referrer; 
+
+
+  let referrer;
   try {
     referrer = await User.findById(user.referrer);
   } catch (err) {
     console.log(err);
     return res.status(500).json({
-      message:"Referrer not found"
-    })
+      message: "Referrer not found",
+    });
   }
-
-user.referrerName = referrer.name,
-console.log(referrer);
-console.log(referrer.name);
-console.log(user);
+  if (user.referrer) {
+    user.referrerName = referrer.name;
+  }
+  console.log(referrer);
+  // console.log(referrer.name);
+  console.log(user);
   res
     .status(201)
     .json({ token, message: "User Logged In Successfully", userDetails: user });
@@ -270,21 +265,20 @@ exports.getUserDetails = async (req, res, next) => {
   }
   user.orders = orders;
 
-  let revenue=0;
-  orders.forEach(order=>{
-    revenue+=order.totalPrice;
-  })
+  let revenue = 0;
+  orders.forEach((order) => {
+    revenue += order.totalPrice;
+  });
 
-user.totalOrders = orders.length;
-user.totalRevenue = revenue;
+  user.totalOrders = orders.length;
+  user.totalRevenue = revenue;
 
   res.status(200).json({
     success: true,
     user,
     orders,
-    totalOrders : orders.length,
-    totalRevenue:revenue,
-
+    totalOrders: orders.length,
+    totalRevenue: revenue,
   });
 };
 
