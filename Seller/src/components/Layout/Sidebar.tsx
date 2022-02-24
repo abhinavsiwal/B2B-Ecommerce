@@ -47,7 +47,7 @@ const Sidebar = () => {
                     <a className="menu-link" href="#">
                       {" "}
                       <i className="icon material-icons md-home"></i>
-                      <span className="text">Dashboard</span>
+                      <span className="text">Admin-Dashboard</span>
                     </a>
                   </Link>
                 </li>
@@ -74,6 +74,14 @@ const Sidebar = () => {
                     <a className="menu-link" href="page-sellers-cards.html">
                       <i className="icon material-icons md-store"></i>
                       <span className="text">Admin-Sellers</span>
+                    </a>
+                  </Link>
+                </li>
+                <li className="menu-item">
+                  <Link href="/adminDesigns">
+                    <a className="menu-link" href="page-sellers-cards.html">
+                      <i className="icon material-icons md-store"></i>
+                      <span className="text">Admin-Designs</span>
                     </a>
                   </Link>
                 </li>
