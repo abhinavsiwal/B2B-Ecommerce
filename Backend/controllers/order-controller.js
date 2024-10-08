@@ -6,8 +6,8 @@ const User = require("../models/User");
 const Product = require("../models/Product");
 
 let instance = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY,
-  key_secret: "5IleBUFesuSkE49WgfxKzXL2",
+  key_id: "rzp_test_aAPRAHUGAt4n9q",
+  key_secret: "aTQcF3HXB2DJxQjKinrpA06n",
 });
 
 exports.createOrder = async (req, res, next) => {
